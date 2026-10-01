@@ -1,0 +1,63 @@
+meta:
+  version: 1.0.0
+options:
+- display: GroupBox
+  category: [Smarter Gatehouses]
+  header: '{{pathing_group}}'
+  text: '{{pathing_group_descr}}'
+  hasHeader: true
+  children:
+  - url: smarter-gatehouses.pathing.enemy_gates_closed
+    name: smarter-gatehouses-pathing-enemy-gates-closed
+    text: '{{enemy_gates_closed}}'
+    tooltip: '{{enemy_gates_closed_tooltip}}'
+    display: Switch
+    contents:
+      type: boolean
+      value: true
+
+- display: GroupBox
+  category: [Smarter Gatehouses]
+  header: '{{detection_group}}'
+  text: '{{detection_group_descr}}'
+  hasHeader: true
+  children:
+  - url: smarter-gatehouses.detection.centred
+    name: smarter-gatehouses-detection-centred
+    text: '{{centred}}'
+    tooltip: '{{centred_tooltip}}'
+    display: Switch
+    contents:
+      type: boolean
+      value: true
+  - url: smarter-gatehouses.detection.reachable_only
+    name: smarter-gatehouses-detection-reachable-only
+    text: '{{reachable_only}}'
+    tooltip: '{{reachable_only_tooltip}}'
+    display: Switch
+    contents:
+      type: boolean
+      value: true
+
+- display: GroupBox
+  category: [Smarter Gatehouses]
+  header: '{{walls_group}}'
+  text: '{{walls_group_descr}}'
+  hasHeader: true
+  children:
+  - url: smarter-gatehouses.walls.stairs_needed
+    name: smarter-gatehouses-walls-stairs-needed
+    text: '{{stairs_needed}}'
+    tooltip: '{{stairs_needed_tooltip}}'
+    display: Switch
+    contents:
+      type: boolean
+      value: false
+  - url: smarter-gatehouses.walls.stairs_needed_ai
+    name: smarter-gatehouses-walls-stairs-needed-ai
+    text: '{{stairs_needed_ai}}'
+    tooltip: '{{stairs_needed_ai_tooltip}}'
+    display: Switch
+    contents:
+      type: boolean
+      value: false

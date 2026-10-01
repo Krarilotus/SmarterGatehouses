@@ -164,7 +164,7 @@ C.SHADOW = C.LINK_LIST + MAX_LINKS * 8
 C.CHAIN = C.SHADOW + MAX_CLIMBS * 4
 C.LEGS = C.CHAIN + 1024                      -- two_legs' variables, 4 bytes each
 local LEG_NAMES = { "LEG_GATE", "FORCE_BID", "FORCE_MODE", "HIGH_AREA", "E1X", "E1Y", "E2X",
-  "E2Y", "EX", "EY", "SX", "SY", "DX_", "DY_", "N1", "RX", "RY", "GIN", "ENTRY_KIND", "RULES_NOW" }
+  "E2Y", "EX", "EY", "SX", "SY", "DX_", "DY_", "N1", "RX", "RY", "GIN", "ENTRY_KIND", "RULES_NOW", "VIOLATED" }
 C.SAVE_A = C.LEGS + #LEG_NAMES * 4
 C.SAVE_B = C.SAVE_A + 0x190
 C.SIZE = C.SAVE_B + 0x190
@@ -518,6 +518,7 @@ return {
           TWO_LEGS = twoLegs,
           ROUTE_OK = routeOk,
           RULES_NOW = legValues.RULES_NOW,
+          VIOLATED = legValues.VIOLATED,
           LEG_GATE = control + C.LEGS,
           UNIT_IN_PASSAGE = UNIT_IN_PASSAGE,
           UNIT_CAN_CLIMB = UNIT_CAN_CLIMB,

@@ -256,17 +256,18 @@ ret
 -- Route finding: setting every gatehouse up for one search
 ---------------------------------------------------------------------------------------
 -- prepare(player, mode), stdcall. Each gatehouse is made one of
---   as it is     (mode 0)
---   roof         (mode 1): passage shut, roof joined to the walls - along the walls, over it
---   passage      (mode 2): passage open, roof cut off from the walls - through it, below
---   per gatehouse (mode 3): roof or passage, for a trip between the ground and the heights
+--   as it is      (mode 0)
+--   roof          (mode 1): passage shut, roof joined to the walls - along the walls, over it
+--   passage       (mode 2): passage open, roof cut off from the walls - through it, below
+--   per gatehouse (modes 3, 4, 5)
 -- and, when that setting is on, a gatehouse of another team is shut as well.
 --
--- Mode 3 asks, for each gatehouse: is it the one the unit stands on (on the roof -> roof;
--- in the passage -> passage) or the one it is going to (roof)? Otherwise it is a passage
--- when one of its two entrances lies in CHAIN - the ground the unit has to cross on foot
--- before it reaches stairs, filled in by chain_build - and a roof when not, since then the
--- only use the trip can make of it is walking over it on the walls.
+-- Modes 3 to 5 first ask, for each gatehouse: is it the one the unit stands on (on the roof
+-- -> roof; in the passage -> passage) or the one it is going to (roof)? Every other one is
+-- a passage in mode 4 and a roof in mode 5. In mode 3 it is a passage when one of its two
+-- entrances lies in CHAIN - the ground the unit has to cross on foot before it reaches
+-- stairs, filled in by chain_build - and a roof when not, since then the only use the trip
+-- can make of it is walking over it on the walls.
 --
 -- "Shut" is the game's own mechanism: the building's gate state byte (+0x2A2, 2 = closed)
 -- decides whether updatePathLinkageTileMapRelatedToGates lays the two entrance links or
@@ -302,7 +303,7 @@ cmp eax, 1
 ja p_next
 mov ebx, [esp+24]
 cmp ebx, 3
-jne p_enemy
+jb p_enemy
 cmp edi, [FORCE_BID]
 jne p_special
 mov ebx, [FORCE_MODE]
@@ -314,6 +315,10 @@ cmp edi, [SPECIAL_R2]
 je p_roof
 cmp edi, [SPECIAL_P]
 je p_pass
+cmp ebx, 4
+je p_pass
+cmp ebx, 5
+je p_roof
 movzx eax, word [esi+0x2D2]
 test eax, eax
 je p_pass
@@ -1151,17 +1156,21 @@ ret
 -- gatehouse. A unit on a gatehouse tile that is walking through the passage counts as on
 -- the ground: that is the same per-unit byte the game uses to draw it down there.
 --   ground to ground      every gatehouse a passage: through it below, never onto its roof
+--                         (mode 4)
 --   high to high          every gatehouse a roof: over it on top, never down its doors
+--                         (mode 5)
 --   ground to / from high each gatehouse one or the other, see prepare (mode 3)
+-- When that search finds nothing - a tower reached from a gatehouse roof by going down
+-- the stairs and through a gate below, say - the other two are tried as well, and every
+-- route found, these and the game's own, is replayed by route_ok first: a route that uses
+-- a gatehouse as stairs counts as no route.
 --
--- Before a ground / high search, rule_ok (below) says whether the rule leaves any way there
--- at all. When it does not - or when the rule's own search finds nothing - the game's own
--- search is run, and its route is kept only if route_ok finds no gatehouse used as stairs
--- in it. Otherwise the unit is stopped where it stands, exactly as if it had arrived: a
--- failed search alone is what left units frozen mid-stride (most callers set the walking
--- state whatever the search says, and the walk code retries the failing search every 40
--- ticks), and simply taking the game's route is what let a quick second click - through
--- the gate, then onto its roof while still in the passage - walk a unit up the doors.
+-- rule_ok (below) first says whether the rule leaves any way there at all. When it does not,
+-- or when no search finds a legal route, the game's own search is run, and its route is
+-- kept only if route_ok finds no gatehouse used as stairs in it. Otherwise the unit is
+-- stopped where it stands, exactly as if it had arrived: a failed search alone is what left
+-- units frozen mid-stride (most callers set the walking state whatever the search says,
+-- and the walk code retries the failing search every 40 ticks).
 --
 -- high_at(eax = x, ecx = y) returns 0 ground, 1 high, 2 gatehouse; bld_at the building.
 local path_search = [[
@@ -1215,17 +1224,7 @@ call bld_at
 mov [SPECIAL_R2], eax
 mov eax, 2
 d_known:
-test edi, edi
-jne s_high
-test eax, eax
-jne mixed
-mov ebx, 2
-jmp search
-s_high:
-mov ebx, 1
-test eax, eax
-jne search
-mixed:
+push eax
 movsx eax, word [esi+UNIT_CAN_CLIMB]
 push eax
 push dword [ebp+0x14]
@@ -1233,9 +1232,21 @@ push dword [ebp+0x10]
 lea eax, [esi+UNIT_START]
 push eax
 call RULE_OK
-xor ebx, ebx
+mov ecx, eax
+pop eax
+test ecx, ecx
+je fallback
+test edi, edi
+jne s_high
 test eax, eax
-je search
+jne mixed
+mov ebx, 4
+jmp search
+s_high:
+mov ebx, 5
+test eax, eax
+jne search
+mixed:
 push edi
 call CHAIN_BUILD
 mov ebx, 3
@@ -1257,47 +1268,33 @@ cmp eax, -1
 je search
 test eax, eax
 jg done
-jmp fallback
+mov edi, 3
+jmp retry
 search:
 mov edi, ebx
-push ebx
-push dword [esp+20]
-call SHUT_GATES
-mov ecx, ebp
-push dword [esp+20]
-push dword [esp+20]
-call DO_PATHFINDING
-push eax
-call REOPEN_GATES
-pop eax
+call do_search
+jg done
 cmp dword [RULES_NOW], 0
 je done
-test edi, edi
-je check
-test eax, eax
+retry:
+cmp edi, 5
+je try4
+mov ebx, 5
+call do_search
+jg done
+cmp edi, 4
+je fallback
+try4:
+mov ebx, 4
+call do_search
 jg done
 fallback:
-push 0
-push dword [esp+20]
-call SHUT_GATES
-mov ecx, ebp
-push dword [esp+20]
-push dword [esp+20]
-call DO_PATHFINDING
-push eax
-call REOPEN_GATES
-pop eax
-check:
-test eax, eax
-jle done
-push eax
-push eax
-lea ecx, [esi+UNIT_START]
-push ecx
-call ROUTE_OK
-test eax, eax
-pop eax
-jne done
+mov dword [VIOLATED], 0
+xor ebx, ebx
+call do_search
+jg done
+cmp dword [VIOLATED], 0
+je done
 movzx eax, word [esi+0x6D8]
 movzx ecx, word [esi+0x6DA]
 mov [esi+0x700], ax
@@ -1316,6 +1313,35 @@ pop ebp
 pop edi
 pop ebx
 ret 8
+
+do_search:
+push ebx
+push dword [esp+24]
+call SHUT_GATES
+mov ecx, ebp
+push dword [esp+24]
+push dword [esp+24]
+call DO_PATHFINDING
+push eax
+call REOPEN_GATES
+pop eax
+test eax, eax
+jle ds_out
+cmp dword [RULES_NOW], 0
+je ds_out
+push eax
+push eax
+lea ecx, [esi+UNIT_START]
+push ecx
+call ROUTE_OK
+test eax, eax
+pop eax
+jne ds_out
+mov dword [VIOLATED], 1
+xor eax, eax
+ds_out:
+test eax, eax
+ret
 
 bld_at:
 lea ecx, [ecx+ecx*2]
@@ -1374,8 +1400,9 @@ ret
 -- call of the game's own calculateCanPlayerUnitsNavigateToAreaFromArea, and its answer is
 -- the rule: through a gate, yes; up onto the roof from its own passage, no.
 --
--- Only a trip between the ground and the heights is asked about; ground to ground and
--- wall to wall are the game's business. A unit down in a gatehouse's passage (+0x402)
+-- Any trip between two different areas is asked about - wall to wall too, since walls with
+-- no stairs between them are only joined through the ground. A unit down in a gatehouse's
+-- passage (+0x402)
 -- stands on roof tiles but is on the ground: its area is taken from the gatehouse's climb
 -- entry (building +0x2D2) instead.
 local rule_ok = [[
@@ -1396,15 +1423,6 @@ xor eax, eax
 mov ebx, 1
 k_s:
 mov edi, eax
-mov eax, [esp+24]
-mov ecx, [esp+28]
-call high_at
-test edi, edi
-setne dl
-test eax, eax
-setne al
-cmp al, dl
-je ok
 mov eax, [esp+24]
 mov ecx, [esp+28]
 call area_at

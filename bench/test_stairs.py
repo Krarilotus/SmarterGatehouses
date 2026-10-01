@@ -150,7 +150,7 @@ def section4(extreme):
     calls, eax = W.search2(3, WALL, results=[0, 9])
     check('rule\'s search fails anyway: searched again the game\'s way',
           (len(calls), calls[0]['links'] == before, calls[1]['links'] == before, eax),
-          (2, False, True, 9))
+          (2, False, False, 9))
     check('   everything back afterwards', (W.links() == before, roof()), (True, 2))
 
     W.area_set(*WALL, 3)
@@ -258,7 +258,7 @@ def planner(W, log):
             b = (b & 0xF0 | st) if i % 2 == 0 else (b & 0x0F | st << 4)
             H.put8(buf + i // 2, b)
         log.append(dict(start=(sx, sy), dest=(dx, dy), g5=H.m.read(W.bld + GATE * 0x32C + 0x2A2, 1)[0],
-                        links=W.links()))
+                        g6=H.m.read(W.bld + 6 * 0x32C + 0x2A2, 1)[0], links=W.links()))
         r = len(steps)
         if W.results:
             r = W.results.pop(0)
@@ -317,7 +317,7 @@ def section6(extreme):
             check('   then out through it (passage)', (log[1]['g5'], ent(log[1]['links']), cross(log[1]['links'])), (0, True, False))
             check('   joined', walk(W, ROOF, eax), (60, 95))
             log.clear(); calls, eax = W.search2(3, ROOF, results=[5])
-            check('first leg misses its entrance: the game\'s search instead', (len(log), log[-1]['links'] == before, eax), (2, True, 52))
+            check('first leg misses its entrance: the game\'s search instead', (len(log), log[-1]['links'] == before, eax), (2, False, 52))
             # the quick second click: in the passage already, then onto the roof
             u = W.unit(8, (GX + 2, GY + 2), passage=10)
             log.clear(); calls, eax = W.search2(8, ROOF)
@@ -404,5 +404,46 @@ def section7(extreme):
 
 for extreme in (False, True):
     section7(extreme)
+
+def section8(extreme):
+    print('8. from a gatehouse roof to a tower')
+    W = World(extreme, cfg(enemy=False, stairs=True))
+    W.gate(); W.lay()
+    W.gate(bid=6, x=140, y=100); W.lay(6)
+    H = W.H
+    H.put32(W.pf + 0x1BB38, 0x51000000)
+    # gatehouse 5's roof and walls are area 3 (stairs down inside), the tower area 4 is
+    # reached by its own stairs from the ground beyond gatehouse 6, which joins 3 and 4
+    for j in range(5):
+        for i in range(5):
+            W.area_set(GX + i, GY + j, 3)
+            W.area_set(140 + i, GY + j, 3)
+    W.area_set(139, GY + 2, 3); W.area_set(145, GY + 2, 4)
+    W.climb(1, 4, GATE, 1, 3, 3)
+    W.climb(2, 4, 6, 3, 4, 3)
+    TOWER = (160, 100)
+    tt = W.tile(*TOWER)
+    H.put16(W.bmap + tt * 2, 7)
+    H.put16(W.bld + 7 * 0x32C + 0xD0, 1); H.put16(W.bld + 7 * 0x32C + 0xD2, 0x4B)
+    got = H.E.u32(H.E.find("F7 04 8D ? ? ? ? 00 01 00 00 75 1F 0F BF 14 4D ? ? ? ? 69 D2 2C 03 00 00 0F BF 8A ? ? ? ? 83 3C 8D ? ? ? ? 00")[0] + 37)
+    tower_is = H.u32(got + 0x4B * 4)
+    W.area_set(*TOWER, 4)
+    log = []
+    H.cpu.hooks[W.dopath] = planner(W, log)
+    ROOF = (GX + 2, GY + 1)
+    W.unit(3, ROOF)
+    calls, eax = W.search2(3, TOWER, results=[0])
+    states = [(c['g5'], H.m.read(W.bld + 6 * 0x32C + 0x2A2, 1)[0]) for c in log]
+    check('roof to a tower beyond a gate: roofs first, then gates below as passages',
+          [(c['g5'], c['g6']) for c in log], [(2, 2), (2, 0)])
+    check('   and that route is taken', (eax, walk(W, ROOF, eax)), (58, TOWER))
+    check('   the cursor agrees', W.cursor(3, TOWER), 1)
+    W.climb(2, 4, 6, 3, 4, 3, owner=1)
+    check('   ... and refuses when the only gate is an enemy\'s', W.cursor(3, TOWER), 0)
+    check('   (the tower really counts as a height)', tower_is != 0, True)
+
+
+for extreme in (False, True):
+    section8(extreme)
 print()
 print('FAILURES: %s' % ', '.join(FAILS) if FAILS else 'ALL OK')

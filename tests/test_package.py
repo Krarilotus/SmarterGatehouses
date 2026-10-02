@@ -42,7 +42,14 @@ class PackageTests(unittest.TestCase):
                 if source.is_file():
                     name = source.relative_to(MODULE).as_posix()
                     expected.add(name)
-                    self.assertEqual(archive.read(name), source.read_bytes(), name)
+                    packaged, original = archive.read(name), source.read_bytes()
+                    # The Store builds from a fresh Windows Git checkout; this
+                    # review checkout can have LF files. Keep binary comparisons
+                    # exact while accepting Git's ordinary text conversion.
+                    if source.suffix in ('.lua', '.yml', '.md'):
+                        packaged = packaged.replace(b'\r\n', b'\n')
+                        original = original.replace(b'\r\n', b'\n')
+                    self.assertEqual(packaged, original, name)
         self.assertEqual({n for n in archive.namelist() if not n.endswith('/')}, expected)
         self.assertFalse(any(n.endswith('.py') or n.startswith(('bench/', 'tools/', 'tests/'))
                              for n in archive.namelist()))

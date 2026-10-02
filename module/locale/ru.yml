@@ -15,3 +15,5 @@ stairs_needed_tooltip: Войскам игрока нужны лестницы �
 stairs_needed_ai: Войскам ИИ нужны лестницы
 stairs_needed_ai_tooltip: То же правило для ИИ. В замках без лестниц стены могут остаться
   без войск.
+tags.bugfixes: Исправления
+tags.balance: Баланс

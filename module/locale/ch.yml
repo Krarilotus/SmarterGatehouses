@@ -11,3 +11,5 @@ stairs_needed: 玩家部队需要阶梯
 stairs_needed_tooltip: 玩家部队需要阶梯才能登上城墙和城门楼顶部。实验功能；默认关闭。
 stairs_needed_ai: AI部队也需要阶梯
 stairs_needed_ai_tooltip: 对AI使用相同规则。没有阶梯的城堡可能无法在城墙上驻军。
+tags.bugfixes: 错误修复
+tags.balance: 平衡

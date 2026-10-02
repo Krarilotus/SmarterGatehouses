@@ -15,3 +15,5 @@ stairs_needed_tooltip: Human troops need stairs to reach walls and gatehouse roo
 stairs_needed_ai: AI troops need stairs
 stairs_needed_ai_tooltip: Apply the same rule to AI players. Castles without stairs
   may leave their walls unmanned.
+tags.bugfixes: Bug fixes
+tags.balance: Balance

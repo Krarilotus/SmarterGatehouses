@@ -15,3 +15,5 @@ stairs_needed_tooltip: A játékos csapatai csak lépcsőn jutnak a falakra és 
 stairs_needed_ai: Az MI csapatainak is lépcső kell
 stairs_needed_ai_tooltip: Ugyanez a szabály az MI-re. Lépcsők nélküli várak falai
   katonák nélkül maradhatnak.
+tags.bugfixes: Hibajavítások
+tags.balance: Egyensúly

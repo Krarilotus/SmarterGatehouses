@@ -15,3 +15,5 @@ stairs_needed_tooltip: Spielertruppen brauchen Treppen zu Mauern und Torhausdäc
 stairs_needed_ai: KI-Truppen brauchen Treppen
 stairs_needed_ai_tooltip: Dieselbe Regel für KI-Spieler. Burgen ohne Treppen können
   ihre Mauern unbesetzt lassen.
+tags.bugfixes: Fehlerkorrekturen
+tags.balance: Balance

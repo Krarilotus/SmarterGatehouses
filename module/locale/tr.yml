@@ -15,3 +15,5 @@ stairs_needed_tooltip: Oyuncu birlikleri surlara ve kapı çatılarına çıkmak
 stairs_needed_ai: Yapay zekâ birlikleri de merdiven kullanmalı
 stairs_needed_ai_tooltip: Aynı kuralı yapay zekâya uygula. Merdivensiz kalelerin surları
   boş kalabilir.
+tags.bugfixes: Hata düzeltmeleri
+tags.balance: Denge

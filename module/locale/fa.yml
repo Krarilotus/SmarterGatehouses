@@ -15,3 +15,5 @@ stairs_needed_tooltip: سربازان بازیکن برای رسیدن به دی
 stairs_needed_ai: سربازان هوش مصنوعی هم به پله نیاز دارند
 stairs_needed_ai_tooltip: همین قانون برای هوش مصنوعی. دیوار قلعه‌های بدون پله ممکن
   است بدون سرباز بماند.
+tags.bugfixes: رفع اشکال
+tags.balance: توازن

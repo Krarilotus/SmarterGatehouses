@@ -15,3 +15,5 @@ stairs_needed_tooltip: Las tropas humanas necesitan escaleras para subir a mural
 stairs_needed_ai: Las tropas de la IA necesitan escaleras
 stairs_needed_ai_tooltip: Aplicar la misma regla a la IA. Los castillos sin escaleras
   pueden dejar sus murallas sin tropas.
+tags.bugfixes: Correcciones
+tags.balance: Equilibrio

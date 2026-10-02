@@ -1,9 +1,10 @@
 meta:
   version: 1.0.0
 files:
-  - src: init.lua
-  - src: templates.lua
-  - src: definition.yml
-  - src: options.yml
-  - src: description.md
-  - src: locale
+- src: init.lua
+- src: templates.lua
+- src: definition.yml
+- src: options.yml
+- src: description.md
+- src: locale
+- src: CREDITS.md

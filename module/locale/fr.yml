@@ -15,3 +15,5 @@ stairs_needed_tooltip: Les troupes humaines ont besoin d’escaliers pour attein
 stairs_needed_ai: Les troupes de l’IA doivent utiliser les escaliers
 stairs_needed_ai_tooltip: Appliquer la même règle à l’IA. Les châteaux sans escalier
   risquent de laisser leurs remparts inoccupés.
+tags.bugfixes: Corrections
+tags.balance: Équilibrage

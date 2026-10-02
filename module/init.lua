@@ -153,6 +153,7 @@ local PASSAGE_TILE_OPERAND = 6                -- [eax + units + 0xD8]
 -- The module's own memory.
 local MAX_GATES = 64
 local MAX_LINKS = 4096
+local MAX_STAGGER = 8                         -- gatehouses tried for a there-and-over trip
 local C = {
   CENTRE_ENABLED = 0, REACH_ENABLED = 4, ENEMY_ENABLED = 8, TOP_ENABLED = 12,
   GATE_COUNT = 16, LINK_COUNT = 20, CUT_X = 24, CUT_Y = 28, CUT_N = 32,
@@ -164,7 +165,7 @@ C.SHADOW = C.LINK_LIST + MAX_LINKS * 8
 C.CHAIN = C.SHADOW + MAX_CLIMBS * 4
 C.LEGS = C.CHAIN + 1024                      -- two_legs' variables, 4 bytes each
 local LEG_NAMES = { "LEG_GATE", "FORCE_BID", "FORCE_MODE", "HIGH_AREA", "E1X", "E1Y", "E2X",
-  "E2Y", "EX", "EY", "SX", "SY", "DX_", "DY_", "N1", "RX", "RY", "GIN", "ENTRY_KIND", "RULES_NOW", "VIOLATED" }
+  "E2Y", "EX", "EY", "SX", "SY", "DX_", "DY_", "N1", "RX", "RY", "GIN", "ENTRY_KIND", "RULES_NOW", "VIOLATED", "CAND", "TRIES", "LEG_DONE", "S_HIGH" }
 C.SAVE_A = C.LEGS + #LEG_NAMES * 4
 C.SAVE_B = C.SAVE_A + 0x190
 C.SIZE = C.SAVE_B + 0x190
@@ -519,6 +520,14 @@ return {
           ROUTE_OK = routeOk,
           RULES_NOW = legValues.RULES_NOW,
           VIOLATED = legValues.VIOLATED,
+          CAND = legValues.CAND,
+          TRIES = legValues.TRIES,
+          LEG_DONE = legValues.LEG_DONE,
+          S_HIGH = legValues.S_HIGH,
+          HIGH_AREA = legValues.HIGH_AREA,
+          MAX_STAGGER = MAX_STAGGER,
+          BUILDING_COUNT = buildings - BUILDING_COUNT_BEFORE_ARRAY,
+          CLIMBS = pathfinding + CLIMB_DATA,
           LEG_GATE = control + C.LEGS,
           UNIT_IN_PASSAGE = UNIT_IN_PASSAGE,
           UNIT_CAN_CLIMB = UNIT_CAN_CLIMB,

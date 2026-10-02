@@ -1160,8 +1160,13 @@ ret
 --   high to high          every gatehouse a roof: over it on top, never down its doors
 --                         (mode 5)
 --   ground to / from high each gatehouse one or the other, see prepare (mode 3)
--- When that search finds nothing - a tower reached from a gatehouse roof by going down
--- the stairs and through a gate below, say - the other two are tried as well, and every
+-- When the mode 3 search finds nothing, the trip may need one gatehouse both ways: through
+-- it below, up the stairs behind it and back over it on the walls (or the reverse). Each
+-- gatehouse that could be such a one - roof joined to the high end's walls, an entrance on
+-- the ground to be crossed - is tried in turn with two_legs (at most MAX_STAGGER of them):
+-- through it to its entrance on the stairs' side, then on from there with it as a roof.
+-- When that finds nothing either - a tower reached from a gatehouse roof by going down
+-- the stairs and through a gate below, say - the other two modes are tried as well, and every
 -- route found, these and the game's own, is replayed by route_ok first: a route that uses
 -- a gatehouse as stairs counts as no route.
 --
@@ -1247,6 +1252,8 @@ mov ebx, 5
 test eax, eax
 jne search
 mixed:
+mov [S_HIGH], edi
+mov dword [LEG_DONE], 0
 push edi
 call CHAIN_BUILD
 mov ebx, 3
@@ -1260,6 +1267,7 @@ legs:
 test eax, eax
 je search
 mov [LEG_GATE], eax
+mov [LEG_DONE], eax
 push ecx
 push dword [esp+24]
 push dword [esp+24]
@@ -1277,6 +1285,48 @@ jg done
 cmp dword [RULES_NOW], 0
 je done
 retry:
+cmp edi, 3
+jne modes
+mov dword [CAND], 1
+mov dword [TRIES], MAX_STAGGER
+stagger:
+mov eax, [CAND]
+cmp eax, [BUILDING_COUNT]
+jge modes
+inc dword [CAND]
+imul ecx, eax, 0x32C
+cmp word [ecx+BUILDINGS+0xD0], 0
+je stagger
+movzx edx, word [ecx+BUILDINGS+0xD2]
+sub edx, 0x2D
+cmp edx, 1
+ja stagger
+movzx edx, word [ecx+BUILDINGS+0x2D2]
+test edx, edx
+je stagger
+imul edx, edx, 0x204
+mov ecx, [edx+CLIMBS+0x1E8]
+cmp ecx, [HIGH_AREA]
+jne stagger
+cmp eax, [LEG_DONE]
+je stagger
+mov [LEG_GATE], eax
+mov ecx, 1
+cmp dword [S_HIGH], 0
+je s_case
+mov ecx, 2
+s_case:
+push ecx
+push dword [esp+24]
+push dword [esp+24]
+call TWO_LEGS
+test eax, eax
+jg done
+cmp eax, -1
+je stagger
+dec dword [TRIES]
+jne stagger
+modes:
 cmp edi, 5
 je try4
 mov ebx, 5

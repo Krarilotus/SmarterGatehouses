@@ -445,5 +445,40 @@ def section8(extreme):
 
 for extreme in (False, True):
     section8(extreme)
+
+def section9(extreme):
+    print('9. through a gatehouse below, then back over it on top')
+    W = World(extreme, cfg(enemy=False, stairs=True))
+    W.gate(); W.lay()
+    H = W.H
+    H.put32(W.pf + 0x1BB38, 0x51000000)
+    for x, y in [(50, 95), (60, 95), (GX - 1, GY + 2)]:
+        W.area_set(x, y, 1)
+    W.area_set(GX + 5, GY + 2, 3)
+    for j in range(5):
+        for i in range(5):
+            W.area_set(GX + i, GY + j, 3)
+    FAR_WALL = (GX + 2, GY + 5)
+    H.put32(W.flags + W.tile(*FAR_WALL) * 4, 0x100); W.area_set(*FAR_WALL, 3)
+    W.climb(1, 4, GATE, 1, 3, 3)
+    log = []
+    H.cpu.hooks[W.dopath] = planner(W, log)
+    IN = (GX + 5, GY + 2)
+    W.unit(3, (50, 95))
+    calls, eax = W.search2(3, FAR_WALL, results=[0])
+    check('outside to the wall beyond the gatehouse: through it, then over it',
+          [(c['start'], c['dest'], c['g5']) for c in log],
+          [((50, 95), FAR_WALL, 0), ((50, 95), IN, 0), (IN, FAR_WALL, 2)])
+    check('   one joined route', walk(W, (50, 95), eax), FAR_WALL)
+    W.unit(4, FAR_WALL)
+    log.clear(); calls, eax = W.search2(4, (60, 95), results=[0])
+    check('that wall back to outside: over it, down the stairs, out through it',
+          [(c['start'], c['dest'], c['g5']) for c in log][1:],
+          [(FAR_WALL, IN, 2), (IN, (60, 95), 0)])
+    check('   one joined route', walk(W, FAR_WALL, eax), (60, 95))
+
+
+for extreme in (False, True):
+    section9(extreme)
 print()
 print('FAILURES: %s' % ', '.join(FAILS) if FAILS else 'ALL OK')

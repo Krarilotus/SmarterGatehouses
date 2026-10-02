@@ -1,3 +1,3 @@
-# Smarter Gatehouses
+# Gatehouse Fixes
 
 调整部队通过城门的方式及城门关闭条件。每项调整均可单独开关。登上城墙必须使用阶梯的规则为可选功能，默认关闭。

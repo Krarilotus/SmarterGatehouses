@@ -6,6 +6,10 @@ the metadata schema version, declares UCP 3.0.7/frontend dependencies and SHC/Ex
 runtime file list. Module descriptions are brief player overviews. No native
 Lua or assembly payload changes are made in this contribution.
 
+Gatehouse Fixes is the concise display name. `smarter-gatehouses` remains the
+package/configuration ID. UCP3 Fixes can depend on it without copying hooks,
+duplicating controls or overwriting user choices.
+
 Closing and route corrections remain ON. Requiring stairs remains OFF for both
 human and AI players. Existing option URLs are preserved, so explicit OFF choices
 can be retained. Closing/route controls use Bugfixes; optional stairs use Balance
@@ -27,8 +31,8 @@ initialization. Fixed Engineers owns siege crew/equipment lifecycle. AIC Tactics
 owns AI recruitment and siege policy. No dependency on those modules is needed to
 provide ordinary gatehouse behavior.
 
-Keep this package independently selectable. A future Fixes bundle can depend on
-its reviewed version once composition and gameplay acceptance pass. Do not copy
+Keep this package independently selectable. The Fixes 0.1.1 integration candidate
+depends on 1.0.3; release still needs composition and gameplay acceptance. Do not copy
 its hooks into that bundle or mark compatible fixes as alternative configurations.
 No `family` field is added by this contribution.
 

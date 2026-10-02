@@ -1,4 +1,4 @@
-# Smarter Gatehouses
+# Gatehouse Fixes
 
 A UCP3 module for Stronghold Crusader and Stronghold Crusader Extreme. Gatehouses close only for
 enemies who can actually reach them, measure that distance from their middle, count as shut to
@@ -11,6 +11,12 @@ The [UCP integration review](UCP-INTEGRATION.md) explains packaging, ownership,
 focused checks and the remaining single-player checks before store release.
 Gatehouse Capture Fix is a separate correction and Improved Tunnelers remains
 its own module. Select compatible fixes together; they are not alternative presets.
+
+The display name is Gatehouse Fixes. The existing package ID `smarter-gatehouses`
+and option URLs stay unchanged, preserving dependencies and saved configuration.
+UCP3 Fixes can select this module through a dependency; the native implementation
+and its switches remain here. The bundle integration is a test candidate until
+the remaining native composition and single-player checks pass.
 
 ## What is in here
 

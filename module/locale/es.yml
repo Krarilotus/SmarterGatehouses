@@ -1,19 +1,17 @@
-# Category labels match the existing UCP2-Legacy grouping keys.
 bugfixes: Bugfixes
 balance_changes: Balance Changes
-pathing_group: "Rutas por las puertas"
-pathing_group_descr: "Elegir rutas que eviten las puertas enemigas."
-enemy_gates_closed: "Tratar las puertas enemigas como cerradas"
-enemy_gates_closed_tooltip: "Las tropas rodean las puertas enemigas, aunque estén abiertas. Las puertas amigas o capturadas siguen siendo transitables."
-detection_group: "Cierre de puertas"
-detection_group_descr: "Elegir cuándo reaccionan las puertas a los enemigos cercanos."
-centred: "Medir la distancia desde el centro"
-centred_tooltip: "Medir desde el centro de la puerta en lugar de una esquina."
-reachable_only: "Ignorar enemigos sin acceso a la puerta"
-reachable_only_tooltip: "Los enemigos tras muros, fosos o acantilados no cierran la puerta si sus zonas no están conectadas."
-walls_group: "Puertas y escaleras"
-walls_group_descr: "Cambio opcional del acceso a las murallas."
-stairs_needed: "Las tropas humanas necesitan escaleras"
-stairs_needed_tooltip: "Las tropas humanas necesitan escaleras para subir a murallas y puertas. Experimental; desactivado por defecto."
-stairs_needed_ai: "Las tropas de la IA necesitan escaleras"
-stairs_needed_ai_tooltip: "Aplicar la misma regla a la IA. Los castillos sin escaleras pueden dejar sus murallas sin tropas."
+enemy_gates_closed: Tratar las puertas enemigas como cerradas
+enemy_gates_closed_tooltip: Las tropas rodean las puertas enemigas, aunque estén abiertas.
+  Las puertas amigas o capturadas siguen siendo transitables.
+detection_group: Cierre de puertas
+centred: Medir la distancia desde el centro
+reachable_only: Ignorar enemigos sin acceso a la puerta
+reachable_only_tooltip: Los enemigos tras muros, fosos o acantilados no cierran la
+  puerta si sus zonas no están conectadas.
+walls_group: Puertas y escaleras
+stairs_needed: Las tropas humanas necesitan escaleras
+stairs_needed_tooltip: Las tropas humanas necesitan escaleras para subir a murallas
+  y puertas. Experimental; desactivado por defecto.
+stairs_needed_ai: Las tropas de la IA necesitan escaleras
+stairs_needed_ai_tooltip: Aplicar la misma regla a la IA. Los castillos sin escaleras
+  pueden dejar sus murallas sin tropas.

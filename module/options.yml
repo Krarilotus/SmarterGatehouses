@@ -1,31 +1,25 @@
 meta:
   version: 1.0.0
 options:
+- url: smarter-gatehouses.pathing.enemy_gates_closed
+  name: smarter-gatehouses-pathing-enemy-gates-closed
+  text: '{{enemy_gates_closed}}'
+  tooltip: '{{enemy_gates_closed_tooltip}}'
+  display: Switch
+  contents:
+    type: boolean
+    value: true
+  category:
+  - '{{bugfixes}}'
 - display: GroupBox
-  category: ['{{bugfixes}}']
-  header: '{{pathing_group}}'
-  text: '{{pathing_group_descr}}'
-  hasHeader: true
-  children:
-  - url: smarter-gatehouses.pathing.enemy_gates_closed
-    name: smarter-gatehouses-pathing-enemy-gates-closed
-    text: '{{enemy_gates_closed}}'
-    tooltip: '{{enemy_gates_closed_tooltip}}'
-    display: Switch
-    contents:
-      type: boolean
-      value: true
-
-- display: GroupBox
-  category: ['{{bugfixes}}']
+  category:
+  - '{{bugfixes}}'
   header: '{{detection_group}}'
-  text: '{{detection_group_descr}}'
   hasHeader: true
   children:
   - url: smarter-gatehouses.detection.centred
     name: smarter-gatehouses-detection-centred
     text: '{{centred}}'
-    tooltip: '{{centred_tooltip}}'
     display: Switch
     contents:
       type: boolean
@@ -38,11 +32,10 @@ options:
     contents:
       type: boolean
       value: true
-
 - display: GroupBox
-  category: ['{{balance_changes}}']
+  category:
+  - '{{balance_changes}}'
   header: '{{walls_group}}'
-  text: '{{walls_group_descr}}'
   hasHeader: true
   children:
   - url: smarter-gatehouses.walls.stairs_needed

@@ -68,7 +68,8 @@ class PackageTests(unittest.TestCase):
         groups = yaml.safe_load(self.archive.read('options.yml'))['options']
         self.assertEqual([g['category'] for g in groups],
                          [['{{bugfixes}}'], ['{{bugfixes}}'], ['{{balance_changes}}']])
-        switches = {c['url']: c['contents']['value'] for g in groups for c in g['children']}
+        controls = [c for g in groups for c in g.get('children', [g])]
+        switches = {c['url']: c['contents']['value'] for c in controls}
         self.assertEqual(switches, {
             'smarter-gatehouses.pathing.enemy_gates_closed': True,
             'smarter-gatehouses.detection.centred': True,
@@ -76,7 +77,7 @@ class PackageTests(unittest.TestCase):
             'smarter-gatehouses.walls.stairs_needed': False,
             'smarter-gatehouses.walls.stairs_needed_ai': False,
         })
-        self.assertTrue(all(c['display'] == 'Switch' for g in groups for c in g['children']))
+        self.assertTrue(all(c['display'] == 'Switch' for c in controls))
 
 
 if __name__ == '__main__':

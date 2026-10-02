@@ -1,19 +1,17 @@
-# Category labels match the existing UCP2-Legacy grouping keys.
 bugfixes: Bugfixes
 balance_changes: Balance Changes
-pathing_group: "Wege durch Torhäuser"
-pathing_group_descr: "Wege um feindliche Tore planen."
-enemy_gates_closed: "Feindliche Tore als geschlossen behandeln"
-enemy_gates_closed_tooltip: "Truppen umgehen auch offene feindliche Tore. Eigene, verbündete und eroberte Tore bleiben passierbar."
-detection_group: "Tore schließen"
-detection_group_descr: "Festlegen, wann Tore auf nahe Feinde reagieren."
-centred: "Abstand von der Mitte aus messen"
-centred_tooltip: "Den Abstand von der Mitte des Torhauses statt von einer Ecke messen."
-reachable_only: "Unerreichbare Feinde ignorieren"
-reachable_only_tooltip: "Feinde hinter Mauern, Gräben oder Klippen schließen das Tor nicht, wenn ihre Gebiete getrennt sind."
-walls_group: "Torhäuser und Treppen"
-walls_group_descr: "Optionale Änderung des Mauerzugangs."
-stairs_needed: "Spielertruppen brauchen Treppen"
-stairs_needed_tooltip: "Spielertruppen brauchen Treppen zu Mauern und Torhausdächern. Experimentell; standardmäßig aus."
-stairs_needed_ai: "KI-Truppen brauchen Treppen"
-stairs_needed_ai_tooltip: "Dieselbe Regel für KI-Spieler. Burgen ohne Treppen können ihre Mauern unbesetzt lassen."
+enemy_gates_closed: Feindliche Tore als geschlossen behandeln
+enemy_gates_closed_tooltip: Truppen umgehen auch offene feindliche Tore. Eigene, verbündete
+  und eroberte Tore bleiben passierbar.
+detection_group: Tore schließen
+centred: Abstand von der Mitte aus messen
+reachable_only: Unerreichbare Feinde ignorieren
+reachable_only_tooltip: Feinde hinter Mauern, Gräben oder Klippen schließen das Tor
+  nicht, wenn ihre Gebiete getrennt sind.
+walls_group: Torhäuser und Treppen
+stairs_needed: Spielertruppen brauchen Treppen
+stairs_needed_tooltip: Spielertruppen brauchen Treppen zu Mauern und Torhausdächern.
+  Experimentell; standardmäßig aus.
+stairs_needed_ai: KI-Truppen brauchen Treppen
+stairs_needed_ai_tooltip: Dieselbe Regel für KI-Spieler. Burgen ohne Treppen können
+  ihre Mauern unbesetzt lassen.

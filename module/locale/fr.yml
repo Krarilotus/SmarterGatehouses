@@ -1,19 +1,17 @@
-# Category labels match the existing UCP2-Legacy grouping keys.
 bugfixes: Bugfixes
 balance_changes: Balance Changes
-pathing_group: "Trajets des portes"
-pathing_group_descr: "Choisir un trajet autour des portes ennemies."
-enemy_gates_closed: "Considérer les portes ennemies comme fermées"
-enemy_gates_closed_tooltip: "Les troupes contournent les portes ennemies, même ouvertes. Les portes amies ou capturées restent accessibles."
-detection_group: "Fermeture des portes"
-detection_group_descr: "Choisir quand les portes réagissent aux ennemis proches."
-centred: "Mesurer la distance depuis le centre"
-centred_tooltip: "Mesurer depuis le centre de la porte plutôt que depuis un coin."
-reachable_only: "Ignorer les ennemis sans accès à la porte"
-reachable_only_tooltip: "Les ennemis derrière un mur, des douves ou une falaise ne ferment pas la porte si les zones sont séparées."
-walls_group: "Portes et escaliers"
-walls_group_descr: "Modification facultative de l’accès aux remparts."
-stairs_needed: "Les troupes humaines doivent utiliser les escaliers"
-stairs_needed_tooltip: "Les troupes humaines ont besoin d’escaliers pour atteindre les remparts et les toits des portes. Expérimental ; désactivé par défaut."
-stairs_needed_ai: "Les troupes de l’IA doivent utiliser les escaliers"
-stairs_needed_ai_tooltip: "Appliquer la même règle à l’IA. Les châteaux sans escalier risquent de laisser leurs remparts inoccupés."
+enemy_gates_closed: Considérer les portes ennemies comme fermées
+enemy_gates_closed_tooltip: Les troupes contournent les portes ennemies, même ouvertes.
+  Les portes amies ou capturées restent accessibles.
+detection_group: Fermeture des portes
+centred: Mesurer la distance depuis le centre
+reachable_only: Ignorer les ennemis sans accès à la porte
+reachable_only_tooltip: Les ennemis derrière un mur, des douves ou une falaise ne
+  ferment pas la porte si les zones sont séparées.
+walls_group: Portes et escaliers
+stairs_needed: Les troupes humaines doivent utiliser les escaliers
+stairs_needed_tooltip: Les troupes humaines ont besoin d’escaliers pour atteindre
+  les remparts et les toits des portes. Expérimental ; désactivé par défaut.
+stairs_needed_ai: Les troupes de l’IA doivent utiliser les escaliers
+stairs_needed_ai_tooltip: Appliquer la même règle à l’IA. Les châteaux sans escalier
+  risquent de laisser leurs remparts inoccupés.

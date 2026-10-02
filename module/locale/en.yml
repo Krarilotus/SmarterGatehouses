@@ -1,19 +1,17 @@
-# Category labels match the existing UCP2-Legacy grouping keys.
 bugfixes: Bugfixes
 balance_changes: Balance Changes
-pathing_group: "Gatehouse routes"
-pathing_group_descr: "Choose routes around enemy gates."
-enemy_gates_closed: "Treat enemy gates as closed"
-enemy_gates_closed_tooltip: "Troops plan around enemy gates, including open ones. Friendly and captured gates still allow passage."
-detection_group: "Gatehouse closing"
-detection_group_descr: "Choose when gates react to nearby enemies."
-centred: "Measure closing distance from the centre"
-centred_tooltip: "Measure from the gatehouse centre instead of a corner."
-reachable_only: "Ignore enemies who cannot reach the gate"
-reachable_only_tooltip: "Enemies behind walls, moats or cliffs do not close the gate when their area is disconnected."
-walls_group: "Gatehouses and stairs"
-walls_group_descr: "Optional change to wall access."
-stairs_needed: "Human troops need stairs"
-stairs_needed_tooltip: "Human troops need stairs to reach walls and gatehouse roofs. Experimental; off by default."
-stairs_needed_ai: "AI troops need stairs"
-stairs_needed_ai_tooltip: "Apply the same rule to AI players. Castles without stairs may leave their walls unmanned."
+enemy_gates_closed: Treat enemy gates as closed
+enemy_gates_closed_tooltip: Troops plan around enemy gates, including open ones. Friendly
+  and captured gates still allow passage.
+detection_group: Gatehouse closing
+centred: Measure closing distance from the centre
+reachable_only: Ignore enemies who cannot reach the gate
+reachable_only_tooltip: Enemies behind walls, moats or cliffs do not close the gate
+  when their area is disconnected.
+walls_group: Gatehouses and stairs
+stairs_needed: Human troops need stairs
+stairs_needed_tooltip: Human troops need stairs to reach walls and gatehouse roofs.
+  Experimental; off by default.
+stairs_needed_ai: AI troops need stairs
+stairs_needed_ai_tooltip: Apply the same rule to AI players. Castles without stairs
+  may leave their walls unmanned.

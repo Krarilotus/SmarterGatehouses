@@ -1,41 +1,19 @@
-pathing_group: Finding a way in
-pathing_group_descr: |
-  An open enemy gatehouse is a trap: troops walk up to it and it shuts in their faces.
-enemy_gates_closed: Treat enemy gatehouses as closed
-enemy_gates_closed_tooltip: |
-  When a unit works out its route, gatehouses of another team count as shut even while they
-  stand open. Player and AI troops take the breach or the open side instead of marching at
-  a gate that will close on them. Your own and your allies' gates are not affected, and a
-  gatehouse your troops have captured still lets them through.
-
-detection_group: When a gatehouse closes
-detection_group_descr: |
-  A gatehouse closes when an enemy comes near. These change what "near" means.
-centred: Measure from the middle of the gatehouse
-centred_tooltip: |
-  The game measures the distance to an enemy from one corner of the gatehouse, so it reacts
-  earlier to enemies on two sides than on the other two. With this on it measures from the
-  middle, and the distance is the same all round.
-reachable_only: Only close for enemies who can walk to the gate
-reachable_only_tooltip: |
-  An enemy only counts when he stands on ground that connects to one side of the gatehouse,
-  or on the walls joined to it. Enemies across a wall, a moat or a cliff are ignored, so a
-  gatehouse inside a sealed castle stays open for your workers until the enemy is actually
-  through the outer wall.
-
-walls_group: Gatehouses as stairs (experimental)
-walls_group_descr: |
-  In the unmodified game every gatehouse is also a staircase: walk in through the gate and
-  you can step out onto the walls.
-stairs_needed: Your troops need stairs to get onto the walls
-stairs_needed_tooltip: |
-  Your troops on the ground need real stairs to get onto walls, towers and gatehouse roofs,
-  and troops up there need stairs to come down. Troops below walk through gatehouses, troops
-  on top walk across them. Sent onto a gatehouse, they go in, up the stairs and onto it.
-  Where there is no way up, the cursor shows "can't go there" and the troops stay where
-  they are.
-stairs_needed_ai: The AI's troops need stairs too
-stairs_needed_ai_tooltip: |
-  The same rule for every AI player. Experimental: an AI castle built without stairs can no
-  longer put troops on its walls, and troops the AI sends somewhere they cannot reach stop
-  where they are.
+# Category labels match the existing UCP2-Legacy grouping keys.
+bugfixes: Bugfixes
+balance_changes: Balance Changes
+pathing_group: "Gatehouse routes"
+pathing_group_descr: "Choose routes around enemy gates."
+enemy_gates_closed: "Treat enemy gates as closed"
+enemy_gates_closed_tooltip: "Troops plan around enemy gates, including open ones. Friendly and captured gates still allow passage."
+detection_group: "Gatehouse closing"
+detection_group_descr: "Choose when gates react to nearby enemies."
+centred: "Measure closing distance from the centre"
+centred_tooltip: "Measure from the gatehouse centre instead of a corner."
+reachable_only: "Ignore enemies who cannot reach the gate"
+reachable_only_tooltip: "Enemies behind walls, moats or cliffs do not close the gate when their area is disconnected."
+walls_group: "Gatehouses and stairs"
+walls_group_descr: "Optional change to wall access."
+stairs_needed: "Human troops need stairs"
+stairs_needed_tooltip: "Human troops need stairs to reach walls and gatehouse roofs. Experimental; off by default."
+stairs_needed_ai: "AI troops need stairs"
+stairs_needed_ai_tooltip: "Apply the same rule to AI players. Castles without stairs may leave their walls unmanned."

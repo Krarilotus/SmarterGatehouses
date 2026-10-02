@@ -2,7 +2,7 @@ meta:
   version: 1.0.0
 options:
 - display: GroupBox
-  category: [Smarter Gatehouses]
+  category: ['{{bugfixes}}']
   header: '{{pathing_group}}'
   text: '{{pathing_group_descr}}'
   hasHeader: true
@@ -17,7 +17,7 @@ options:
       value: true
 
 - display: GroupBox
-  category: [Smarter Gatehouses]
+  category: ['{{bugfixes}}']
   header: '{{detection_group}}'
   text: '{{detection_group_descr}}'
   hasHeader: true
@@ -40,7 +40,7 @@ options:
       value: true
 
 - display: GroupBox
-  category: [Smarter Gatehouses]
+  category: ['{{balance_changes}}']
   header: '{{walls_group}}'
   text: '{{walls_group_descr}}'
   hasHeader: true

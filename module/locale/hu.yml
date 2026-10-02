@@ -1,0 +1,19 @@
+# Category labels match the existing UCP2-Legacy grouping keys.
+bugfixes: Bugfixes
+balance_changes: Balance Changes
+pathing_group: "Útvonalak a kapuknál"
+pathing_group_descr: "Útvonal tervezése az ellenséges kapuk megkerülésével."
+enemy_gates_closed: "Az ellenséges kapuk zártnak számítanak"
+enemy_gates_closed_tooltip: "A csapatok a nyitott ellenséges kapukat is elkerülik. A baráti és elfoglalt kapuk átjárhatók maradnak."
+detection_group: "Kapuk bezárása"
+detection_group_descr: "Mikor reagáljanak a kapuk a közeli ellenségre."
+centred: "Távolság mérése a kapu közepétől"
+centred_tooltip: "A távolságot a kapuház közepétől mérje, ne a sarkától."
+reachable_only: "Az elérhetetlen ellenségek figyelmen kívül hagyása"
+reachable_only_tooltip: "A fal, várárok vagy szikla mögötti ellenség nem zárja be a kaput, ha a területek nem kapcsolódnak."
+walls_group: "Kapuk és lépcsők"
+walls_group_descr: "A falakra jutás választható módosítása."
+stairs_needed: "A játékos csapatainak lépcső kell"
+stairs_needed_tooltip: "A játékos csapatai csak lépcsőn jutnak a falakra és a kapuházak tetejére. Kísérleti; alapból kikapcsolva."
+stairs_needed_ai: "Az MI csapatainak is lépcső kell"
+stairs_needed_ai_tooltip: "Ugyanez a szabály az MI-re. Lépcsők nélküli várak falai katonák nélkül maradhatnak."

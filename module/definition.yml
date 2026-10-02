@@ -1,7 +1,12 @@
 name: smarter-gatehouses
 display-name: Smarter Gatehouses
 type: module
-version: 1.0.2
+version: 1.0.3
 author: Monsterfish
 meta:
-  version: 1.0.2
+  version: 1.0.0
+game: [SHC==1.41, SHCE==1.41]
+tags: [bugfixes]
+dependencies:
+  framework: ^3.0.7
+  frontend: ^1.0.2

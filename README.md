@@ -7,6 +7,11 @@ stop working as staircases onto the walls.
 
 What the module does, in plain English, is in `module/locale/description-en.md`.
 
+The [UCP integration review](UCP-INTEGRATION.md) explains packaging, ownership,
+focused checks and the remaining single-player checks before store release.
+Gatehouse Capture Fix is a separate correction and Improved Tunnelers remains
+its own module. Select compatible fixes together; they are not alternative presets.
+
 ## What is in here
 
 | Folder | |

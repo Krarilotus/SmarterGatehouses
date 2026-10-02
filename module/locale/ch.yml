@@ -1,0 +1,19 @@
+# Category labels match the existing UCP2-Legacy grouping keys.
+bugfixes: Bugfixes
+balance_changes: Balance Changes
+pathing_group: "城门路线"
+pathing_group_descr: "选择绕开敌方城门的路线。"
+enemy_gates_closed: "将敌方城门视为关闭"
+enemy_gates_closed_tooltip: "部队绕开敌方城门，即使城门敞开。己方、盟友和已占领的城门仍可通行。"
+detection_group: "城门关闭"
+detection_group_descr: "选择城门何时对附近敌人作出反应。"
+centred: "从城门中心计算距离"
+centred_tooltip: "从城门楼的中心而非角落计算距离。"
+reachable_only: "忽略无法到达城门的敌人"
+reachable_only_tooltip: "若区域不相通，墙、护城河或悬崖后的敌人不会使城门关闭。"
+walls_group: "城门与阶梯"
+walls_group_descr: "可选的城墙通行规则。"
+stairs_needed: "玩家部队需要阶梯"
+stairs_needed_tooltip: "玩家部队需要阶梯才能登上城墙和城门楼顶部。实验功能；默认关闭。"
+stairs_needed_ai: "AI部队也需要阶梯"
+stairs_needed_ai_tooltip: "对AI使用相同规则。没有阶梯的城堡可能无法在城墙上驻军。"

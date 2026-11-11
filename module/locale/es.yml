@@ -22,3 +22,7 @@ large_gatehouse_damage: "Daño a distancia en puerta grande (%)"
 large_gatehouse_damage_tooltip: "Las tropas sobre una puerta grande reciben esta parte del daño de flechas, virotes y piedras de honda. Aguantan más en la puerta pequeña; bájalo para igualarlas. 100 = sin cambios."
 tags.bugfixes: Correcciones
 tags.balance: Equilibrio
+remember_blocked: "Recordar rutas bloqueadas (menos tirones)"
+remember_blocked_tooltip: "Cuando la regla de escaleras no encuentra camino para una unidad tras probar cada casa de guardia, la misma ruta se omite un momento para las siguientes unidades: usan directamente la búsqueda normal del juego. Un ejército enviado de golpe ya no hace que el juego dé tirones."
+remember_ticks: "Recordar una ruta bloqueada durante (ticks de juego)"
+remember_ticks_tooltip: "100 ticks son unos dos segundos a velocidad normal."

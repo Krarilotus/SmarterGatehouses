@@ -22,3 +22,7 @@ large_gatehouse_damage: "Dégâts à distance sur une grande porte (%)"
 large_gatehouse_damage_tooltip: "Les troupes sur une grande porte subissent cette part des dégâts des flèches, carreaux et pierres de fronde. Elles tiennent plus longtemps sur une petite porte ; baissez cette valeur pour équilibrer. 100 = inchangé."
 tags.bugfixes: Corrections
 tags.balance: Équilibrage
+remember_blocked: "Mémoriser les trajets bloqués (moins de saccades)"
+remember_blocked_tooltip: "Quand la règle des escaliers ne trouve aucun chemin pour une unité après avoir essayé chaque corps de garde, ce même trajet est sauté un court moment pour les unités suivantes : elles passent directement à la recherche normale du jeu. Une armée envoyée d'un coup ne fait plus saccader le jeu."
+remember_ticks: "Mémoriser un trajet bloqué pendant (ticks de jeu)"
+remember_ticks_tooltip: "100 ticks font environ deux secondes à vitesse normale."

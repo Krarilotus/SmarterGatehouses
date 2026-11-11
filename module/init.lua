@@ -23,7 +23,7 @@
 local templates = require("templates")
 
 local DEFAULTS = {
-  pathing = { enemy_gates_closed = true },
+  pathing = { enemy_gates_closed = true, remember_blocked = true, remember_ticks = 100 },
   detection = { centred = true, reachable_only = true },
   walls = { stairs_needed = false, stairs_needed_ai = false, assassins_climb = true },
   damage = { large_gatehouse = 100 },
@@ -116,6 +116,12 @@ local TRIBE_HOOK = 14
 local TRIBE_HOOK_SIZE = 8
 
 -- Which AI character each player runs; 0 is a human player.
+-- The game's tick counter: mov edx, [ticks] in updateUnits.
+local AOB_TICKS = "8B 87 50 0A 00 00 8B 8F 98 09 00 00 8B 15"
+local TICKS_OPERAND = 0x0E
+-- Blocked trips remembered (a power of two): KEY1, KEY2, tick.
+local BLOCKED_ENTRIES = 32
+
 local AOB_PLAYER_AIC = "69 C0 F4 39 00 00 8B 88 ? ? ? ? 69 C9 A4 02 00 00"
 local PLAYER_AIC_OPERAND = 8
 
@@ -526,7 +532,34 @@ return {
         end
         local routeOk = core.allocateAssembly(templates.route_ok, routeValues)
 
+        -- Trips the whole retry chain found nothing for, so the rest of an army skips it.
+        local rememberOn = setting(config, "pathing", "remember_blocked")
+        local ticksSite = rememberOn and scanOptional(AOB_TICKS, "the game's tick counter") or nil
+        local blocked = core.allocate(BLOCKED_ENTRIES * 12 + 32, true)
+        local remember = blocked + BLOCKED_ENTRIES * 12
+        writeInteger(remember, ticksSite ~= nil and 1 or 0)
+        local ticks = config.pathing and tonumber(config.pathing.remember_ticks)
+          or DEFAULTS.pathing.remember_ticks
+        writeInteger(remember + 4, math.max(1, math.min(10000, math.floor(ticks))))
+        local blockedTrips = core.allocateAssembly(templates.blocked_trips, {
+          BLOCKED_ON = remember,
+          RECORD = remember + 16,
+          BLOCKED_TICKS = remember + 4,
+          KEY1 = remember + 8,
+          KEY2 = remember + 12,
+          NEXT = remember + 20,
+          SKIPPED = remember + 24,
+          BLOCKED = blocked,
+          BLOCKED_ENTRIES = BLOCKED_ENTRIES,
+          TICKS = ticksSite ~= nil and readAddress(ticksSite + TICKS_OPERAND) or remember + 28,
+          UNIT_OWNER = UNIT_OWNER,
+          ROW_TABLE = rowTable,
+          AREA_MAP = areaMap,
+        })
         local pathSearch = core.allocateAssembly(templates.path_search, {
+          RECORD = remember + 16,
+          BLOCKED_CHECK = blockedTrips,
+          BLOCKED_ADD = blockedTrips + 5,
           TOP_ENABLED = control + C.TOP_ENABLED,
           AI_ENABLED = control + C.AI_ENABLED,
           ASSASSINS_FREE = control + C.ASSASSINS_FREE,

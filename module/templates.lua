@@ -1189,6 +1189,97 @@ sub [esi+edi+0x9DC], ecx
 jmp RESUME
 ]]
 
+-- A trip the whole retry chain found no legal route for is remembered for BLOCKED_TICKS
+-- ticks: owner, search mode, and the areas the unit starts in and goes to. When an AI sends
+-- its army, every unit makes the same trip, and each used to run every retry again (up to a
+-- dozen whole-map searches a unit). Now the next ones go straight to the game's own search.
+-- Its own allocation (fasm's buffer is too small for path_search with it); entered
+-- through the jumps at +0 (check) and +5 (add).
+-- blocked_check(edx = mode) -> eax = 1: this trip failed lately, go straight to the
+-- fallback. eax = 0: search as usual, and RECORD says to remember the trip if it fails.
+-- blocked_add remembers the trip of the last check and clears RECORD.
+local blocked_trips = [[
+jmp near blocked_check
+jmp near blocked_add
+blocked_check:
+xor eax, eax
+cmp dword [BLOCKED_ON], 0
+je bk_out
+cmp dword [ebp+8], 399
+ja bk_none
+cmp dword [ebp+0xC], 399
+ja bk_none
+cmp dword [ebp+0x10], 399
+ja bk_none
+cmp dword [ebp+0x14], 399
+ja bk_none
+shl edx, 16
+movzx eax, word [esi+UNIT_OWNER]
+or edx, eax
+mov [KEY2], edx
+mov eax, [ebp+0xC]
+lea eax, [eax+eax*2]
+mov eax, [eax*4+ROW_TABLE]
+add eax, [ebp+8]
+movzx ecx, word [eax*2+AREA_MAP]
+mov eax, [ebp+0x14]
+lea eax, [eax+eax*2]
+mov eax, [eax*4+ROW_TABLE]
+add eax, [ebp+0x10]
+movzx eax, word [eax*2+AREA_MAP]
+shl eax, 16
+or eax, ecx
+mov [KEY1], eax
+push ebx
+mov ebx, BLOCKED
+mov ecx, BLOCKED_ENTRIES
+bf_loop:
+mov eax, [ebx]
+cmp eax, [KEY1]
+jne bf_next
+mov eax, [ebx+4]
+cmp eax, [KEY2]
+jne bf_next
+mov eax, [TICKS]
+sub eax, [ebx+8]
+cmp eax, [BLOCKED_TICKS]
+jb bf_hit
+bf_next:
+add ebx, 12
+dec ecx
+jnz bf_loop
+mov dword [RECORD], 1
+xor eax, eax
+pop ebx
+ret
+bf_hit:
+add dword [SKIPPED], 1
+mov eax, 1
+pop ebx
+ret
+bk_none:
+xor eax, eax
+bk_out:
+ret
+blocked_add:
+mov dword [RECORD], 0
+push ebx
+mov ebx, [NEXT]
+lea ecx, [ebx+ebx*2]
+lea ecx, [ecx*4+BLOCKED]
+mov eax, [KEY1]
+mov [ecx], eax
+mov eax, [KEY2]
+mov [ecx+4], eax
+mov eax, [TICKS]
+mov [ecx+8], eax
+inc ebx
+and ebx, BLOCKED_ENTRIES-1
+mov [NEXT], ebx
+pop ebx
+ret
+]]
+
 ---------------------------------------------------------------------------------------
 -- Route finding: the wrapper
 ---------------------------------------------------------------------------------------
@@ -1230,6 +1321,7 @@ push ebp
 mov ebp, ecx
 xor ebx, ebx
 mov dword [RULES_NOW], 0
+mov dword [RECORD], 0
 cmp dword [ASSASSINS_FREE], 0
 je who
 cmp word [esi+UNIT_TYPE], 0x49
@@ -1302,6 +1394,12 @@ mov ebx, 5
 test eax, eax
 jne search
 mixed:
+push eax
+mov edx, 3
+call BLOCKED_CHECK
+test eax, eax
+pop eax
+jnz fallback
 mov [S_HIGH], edi
 mov dword [LEG_DONE], 0
 push edi
@@ -1335,6 +1433,10 @@ jg done
 cmp dword [RULES_NOW], 0
 je done
 retry:
+mov edx, edi
+call BLOCKED_CHECK
+test eax, eax
+jnz fallback
 cmp edi, 3
 jne modes
 mov dword [CAND], 1
@@ -1389,6 +1491,10 @@ mov ebx, 4
 call do_search
 jg done
 fallback:
+cmp dword [RECORD], 0
+je fallback_go
+call BLOCKED_ADD
+fallback_go:
 mov dword [VIOLATED], 0
 xor ebx, ebx
 call do_search
@@ -1749,4 +1855,5 @@ return {
   gate_damage = gate_damage,
   restore = restore,
   path_search = path_search,
+  blocked_trips = blocked_trips,
 }

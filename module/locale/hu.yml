@@ -22,3 +22,7 @@ large_gatehouse_damage: "Távolsági sebzés nagy kapuházon (%)"
 large_gatehouse_damage_tooltip: "A nagy kapuház tetején álló csapatok a nyilak, nyílvesszők és parittyakövek sebzésének ennyi részét kapják. A kis kapuházon tovább bírják; csökkentse a kiegyenlítéshez. 100 = változatlan."
 tags.bugfixes: Hibajavítások
 tags.balance: Egyensúly
+remember_blocked: "Elzárt utak megjegyzése (kevesebb akadás)"
+remember_blocked_tooltip: "Ha a lépcsőszabály minden kapuház kipróbálása után sem talál utat egy egységnek, ugyanazt az utat a következő egységeknél rövid ideig kihagyja: azok egyből a játék saját útkeresését használják. Az egyszerre elküldött sereg már nem akasztja meg a játékot."
+remember_ticks: "Elzárt út megjegyzése ennyi ideig (játékütem)"
+remember_ticks_tooltip: "100 ütem normál sebességen kb. két másodperc."

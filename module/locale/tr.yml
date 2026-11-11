@@ -22,3 +22,7 @@ large_gatehouse_damage: "Büyük kapıda menzilli hasar (%)"
 large_gatehouse_damage_tooltip: "Büyük kapının üstündeki birlikler oklar, cıvatalar ve sapan taşlarından gelen hasarın bu kadarını alır. Küçük kapıda daha uzun dayanırlar; eşitlemek için düşürün. 100 = değişmez."
 tags.bugfixes: Hata düzeltmeleri
 tags.balance: Denge
+remember_blocked: "Engelli yolları hatırla (daha az takılma)"
+remember_blocked_tooltip: "Merdiven kuralı her kapı kulesini denedikten sonra bir birim için yol bulamazsa, aynı yol sonraki birimler için kısa bir süre atlanır: doğrudan oyunun kendi yol aramasını kullanırlar. Tek seferde gönderilen bir ordu artık oyunu takıltmaz."
+remember_ticks: "Engelli yolu hatırlama süresi (oyun tıkı)"
+remember_ticks_tooltip: "100 tık normal hızda yaklaşık iki saniyedir."

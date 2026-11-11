@@ -11,6 +11,29 @@ options:
     value: true
   category:
   - '{{bugfixes}}'
+- url: smarter-gatehouses.pathing.remember_blocked
+  name: smarter-gatehouses-pathing-remember-blocked
+  text: '{{remember_blocked}}'
+  tooltip: '{{remember_blocked_tooltip}}'
+  display: Switch
+  contents:
+    type: boolean
+    value: true
+  category:
+  - '{{bugfixes}}'
+- url: smarter-gatehouses.pathing.remember_ticks
+  name: smarter-gatehouses-pathing-remember-ticks
+  text: '{{remember_ticks}}'
+  tooltip: '{{remember_ticks_tooltip}}'
+  display: Number
+  contents:
+    type: integer
+    value: 100
+    min: 10
+    max: 1000
+    step: 10
+  category:
+  - '{{bugfixes}}'
 - display: GroupBox
   category:
   - '{{bugfixes}}'

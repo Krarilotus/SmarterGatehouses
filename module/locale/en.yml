@@ -22,3 +22,7 @@ large_gatehouse_damage: "Ranged damage on a large gatehouse (%)"
 large_gatehouse_damage_tooltip: "Troops standing on top of a large gatehouse take this share of the damage from arrows, bolts and sling stones. Troops last longer on a small gatehouse; lower this to even it out. 100 = unchanged."
 tags.bugfixes: Bug fixes
 tags.balance: Balance
+remember_blocked: "Remember blocked trips (less lag)"
+remember_blocked_tooltip: "When the stairs rule finds no way for a unit after trying every gatehouse, the same trip is skipped for the next units for a short while: they go straight to the game's own search. An army ordered somewhere at once no longer makes the game stutter."
+remember_ticks: "Remember a blocked trip for (game ticks)"
+remember_ticks_tooltip: "100 ticks are about two seconds at normal speed."

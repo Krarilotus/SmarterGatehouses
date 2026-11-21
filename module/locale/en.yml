@@ -1,28 +1,32 @@
 bugfixes: Bugfixes
 balance_changes: Balance Changes
 enemy_gates_closed: Treat enemy gates as closed
-enemy_gates_closed_tooltip: Troops plan around enemy gates, including open ones. Friendly
-  and captured gates still allow passage.
-detection_group: Gatehouse closing
+enemy_gates_closed_tooltip: Troops plan around enemy gates, including open ones. Friendly and captured
+  gates still allow passage. This cannot be used with the assassin shortcut in Smarter Pathing. The same
+  restriction applies when either stairs rule is on.
 centred: Measure closing distance from the centre
 reachable_only: Ignore enemies who cannot reach the gate
-reachable_only_tooltip: Enemies behind walls, moats or cliffs do not close the gate
-  when their area is disconnected.
-walls_group: Gatehouses and stairs
+reachable_only_tooltip: Enemies behind walls, moats or cliffs do not close the gate when their area is
+  disconnected.
 stairs_needed: Human troops need stairs
-stairs_needed_tooltip: Human troops need stairs to reach walls and gatehouse roofs.
-  Experimental; off by default.
+stairs_needed_tooltip: Human troops need stairs to reach walls and gatehouse roofs. Experimental; off
+  by default.
 stairs_needed_ai: AI troops need stairs
-stairs_needed_ai_tooltip: Apply the same rule to AI players. Castles without stairs
-  may leave their walls unmanned.
+stairs_needed_ai_tooltip: Apply the same rule to AI players. Castles without stairs may leave their walls
+  unmanned.
 assassins_climb: Assassins still climb walls
 assassins_climb_tooltip: Assassins scale walls with their hooks, so the stairs rule leaves them alone.
-damage_group: "Troops on gatehouses"
-large_gatehouse_damage: "Ranged damage on a large gatehouse (%)"
-large_gatehouse_damage_tooltip: "Troops standing on top of a large gatehouse take this share of the damage from arrows, bolts and sling stones. Troops last longer on a small gatehouse; lower this to even it out. 100 = unchanged."
+large_gatehouse_damage: Ranged damage on a large gatehouse (%)
+large_gatehouse_damage_tooltip: Troops standing on top of a large gatehouse take this share of the damage
+  from arrows, bolts and sling stones. Troops last longer on a small gatehouse; lower this to even it
+  out. 100 = unchanged.
+remember_blocked: Remember blocked trips (less lag)
+remember_blocked_tooltip: 'When the stairs rule finds no way for a unit after trying every gatehouse,
+  the same trip is skipped for the next units for a short while: they go straight to the game''s own search.
+  An army ordered somewhere at once no longer makes the game stutter.'
+remember_ticks: Remember a blocked trip for (game ticks)
+remember_ticks_tooltip: 100 ticks are about two seconds at normal speed.
+centred_tooltip: Measure from the center of the gatehouse so that enemies trigger closing at the same
+  distance from every side.
 tags.bugfixes: Bug fixes
 tags.balance: Balance
-remember_blocked: "Remember blocked trips (less lag)"
-remember_blocked_tooltip: "When the stairs rule finds no way for a unit after trying every gatehouse, the same trip is skipped for the next units for a short while: they go straight to the game's own search. An army ordered somewhere at once no longer makes the game stutter."
-remember_ticks: "Remember a blocked trip for (game ticks)"
-remember_ticks_tooltip: "100 ticks are about two seconds at normal speed."

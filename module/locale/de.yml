@@ -1,28 +1,30 @@
 bugfixes: Bugfixes
 balance_changes: Balance Changes
-enemy_gates_closed: Feindliche Tore als geschlossen behandeln
-enemy_gates_closed_tooltip: Truppen umgehen auch offene feindliche Tore. Eigene, verbündete
-  und eroberte Tore bleiben passierbar.
-detection_group: Tore schließen
-centred: Abstand von der Mitte aus messen
+enemy_gates_closed: Feindliche Tore meiden
+enemy_gates_closed_tooltip: Die Wegsuche meidet auch offene Feindtore. Diese Regel und die Treppenregeln
+  sind mit der Kletterabkürzung unverträglich.
+centred: Abstand ab Tormitte
 reachable_only: Unerreichbare Feinde ignorieren
-reachable_only_tooltip: Feinde hinter Mauern, Gräben oder Klippen schließen das Tor
-  nicht, wenn ihre Gebiete getrennt sind.
-walls_group: Torhäuser und Treppen
+reachable_only_tooltip: Feinde hinter Mauern, Gräben oder Klippen schließen das Tor nicht, wenn ihre Gebiete
+  getrennt sind.
 stairs_needed: Spielertruppen brauchen Treppen
-stairs_needed_tooltip: Spielertruppen brauchen Treppen zu Mauern und Torhausdächern.
-  Experimentell; standardmäßig aus.
+stairs_needed_tooltip: Spielertruppen brauchen Treppen zu Mauern und Torhausdächern. Experimentell; standardmäßig
+  aus.
 stairs_needed_ai: KI-Truppen brauchen Treppen
-stairs_needed_ai_tooltip: Dieselbe Regel für KI-Spieler. Burgen ohne Treppen können
-  ihre Mauern unbesetzt lassen.
+stairs_needed_ai_tooltip: Dieselbe Regel für KI-Spieler. Burgen ohne Treppen können ihre Mauern unbesetzt
+  lassen.
 assassins_climb: Assassinen klettern weiterhin
 assassins_climb_tooltip: Assassinen erklimmen Mauern mit ihren Haken; die Treppenregel gilt für sie nicht.
-damage_group: "Truppen auf Torhäusern"
-large_gatehouse_damage: "Fernkampfschaden auf großem Torhaus (%)"
-large_gatehouse_damage_tooltip: "Truppen auf einem großen Torhaus erleiden diesen Anteil des Schadens durch Pfeile, Bolzen und Schleudersteine. Auf dem kleinen Torhaus halten Truppen länger durch; ein niedrigerer Wert gleicht das aus. 100 = unverändert."
+large_gatehouse_damage: Fernkampfschaden auf großem Torhaus (%)
+large_gatehouse_damage_tooltip: Truppen auf einem großen Torhaus erleiden diesen Anteil des Schadens durch
+  Pfeile, Bolzen und Schleudersteine. Auf dem kleinen Torhaus halten Truppen länger durch; ein niedrigerer
+  Wert gleicht das aus. 100 = unverändert.
+remember_blocked: Blockierte Wege merken (weniger Ruckler)
+remember_blocked_tooltip: 'Findet die Treppen-Regel nach allen Torhäusern keinen Weg für eine Einheit,
+  wird derselbe Weg für die nächsten Einheiten kurz übersprungen: sie nutzen gleich die normale Wegsuche
+  des Spiels. Eine ganze Armee, die auf einmal losgeschickt wird, lässt das Spiel nicht mehr ruckeln.'
+remember_ticks: Blockierten Weg merken für (Spielticks)
+remember_ticks_tooltip: 100 Ticks sind bei normaler Geschwindigkeit etwa zwei Sekunden.
+centred_tooltip: Gegner lösen das Schließen auf allen Seiten in gleichem Abstand aus.
 tags.bugfixes: Fehlerkorrekturen
 tags.balance: Balance
-remember_blocked: "Blockierte Wege merken (weniger Ruckler)"
-remember_blocked_tooltip: "Findet die Treppen-Regel nach allen Torhäusern keinen Weg für eine Einheit, wird derselbe Weg für die nächsten Einheiten kurz übersprungen: sie nutzen gleich die normale Wegsuche des Spiels. Eine ganze Armee, die auf einmal losgeschickt wird, lässt das Spiel nicht mehr ruckeln."
-remember_ticks: "Blockierten Weg merken für (Spielticks)"
-remember_ticks_tooltip: "100 Ticks sind bei normaler Geschwindigkeit etwa zwei Sekunden."

@@ -1,28 +1,28 @@
 bugfixes: Bugfixes
 balance_changes: Balance Changes
-enemy_gates_closed: Düşman kapılarını kapalı say
-enemy_gates_closed_tooltip: Birlikler açık olanlar dâhil düşman kapılarını dolaşır.
-  Dost ve ele geçirilmiş kapılar geçişe açık kalır.
-detection_group: Kapıların kapanması
-centred: Kapanma mesafesini merkezden ölç
+enemy_gates_closed: Düşman kapılarından kaçın
+enemy_gates_closed_tooltip: Birlikler açık düşman kapılarından da kaçınır. Bu kural ve merdiven kuralları
+  suikastçı kestirmesiyle uyuşmaz.
+centred: Kapı merkezinden uzaklık
 reachable_only: Kapıya ulaşamayan düşmanları yok say
-reachable_only_tooltip: Bölgeleri bağlantısızsa duvar, hendek veya uçurum arkasındaki
-  düşmanlar kapıyı kapatmaz.
-walls_group: Kapılar ve merdivenler
+reachable_only_tooltip: Bölgeleri bağlantısızsa duvar, hendek veya uçurum arkasındaki düşmanlar kapıyı
+  kapatmaz.
 stairs_needed: Oyuncu birlikleri merdiven kullanmalı
-stairs_needed_tooltip: Oyuncu birlikleri surlara ve kapı çatılarına çıkmak için merdiven
-  kullanır. Deneysel; varsayılan olarak kapalı.
+stairs_needed_tooltip: Oyuncu birlikleri surlara ve kapı çatılarına çıkmak için merdiven kullanır. Deneysel;
+  varsayılan olarak kapalı.
 stairs_needed_ai: Yapay zekâ birlikleri de merdiven kullanmalı
-stairs_needed_ai_tooltip: Aynı kuralı yapay zekâya uygula. Merdivensiz kalelerin surları
-  boş kalabilir.
+stairs_needed_ai_tooltip: Aynı kuralı yapay zekâya uygula. Merdivensiz kalelerin surları boş kalabilir.
 assassins_climb: Suikastçılar tırmanmaya devam eder
 assassins_climb_tooltip: Suikastçılar kancalarıyla surlara tırmanır; merdiven kuralı onlara uygulanmaz.
-damage_group: "Kapılardaki birlikler"
-large_gatehouse_damage: "Büyük kapıda menzilli hasar (%)"
-large_gatehouse_damage_tooltip: "Büyük kapının üstündeki birlikler oklar, cıvatalar ve sapan taşlarından gelen hasarın bu kadarını alır. Küçük kapıda daha uzun dayanırlar; eşitlemek için düşürün. 100 = değişmez."
+large_gatehouse_damage: Büyük kapıda menzilli hasar (%)
+large_gatehouse_damage_tooltip: Büyük kapının üstündeki birlikler oklar, cıvatalar ve sapan taşlarından
+  gelen hasarın bu kadarını alır. Küçük kapıda daha uzun dayanırlar; eşitlemek için düşürün. 100 = değişmez.
+remember_blocked: Engelli yolları hatırla (daha az takılma)
+remember_blocked_tooltip: 'Merdiven kuralı her kapı kulesini denedikten sonra bir birim için yol bulamazsa,
+  aynı yol sonraki birimler için kısa bir süre atlanır: doğrudan oyunun kendi yol aramasını kullanırlar.
+  Tek seferde gönderilen bir ordu artık oyunu takıltmaz.'
+remember_ticks: Engelli yolu hatırlama süresi (oyun tıkı)
+remember_ticks_tooltip: 100 tık normal hızda yaklaşık iki saniyedir.
+centred_tooltip: Düşman hangi yandan gelirse gelsin kapı aynı mesafede kapanır.
 tags.bugfixes: Hata düzeltmeleri
 tags.balance: Denge
-remember_blocked: "Engelli yolları hatırla (daha az takılma)"
-remember_blocked_tooltip: "Merdiven kuralı her kapı kulesini denedikten sonra bir birim için yol bulamazsa, aynı yol sonraki birimler için kısa bir süre atlanır: doğrudan oyunun kendi yol aramasını kullanırlar. Tek seferde gönderilen bir ordu artık oyunu takıltmaz."
-remember_ticks: "Engelli yolu hatırlama süresi (oyun tıkı)"
-remember_ticks_tooltip: "100 tık normal hızda yaklaşık iki saniyedir."

@@ -1,28 +1,32 @@
-bugfixes: Bugfixes
-balance_changes: Balance Changes
-enemy_gates_closed: Considérer les portes ennemies comme fermées
-enemy_gates_closed_tooltip: Les troupes contournent les portes ennemies, même ouvertes.
-  Les portes amies ou capturées restent accessibles.
-detection_group: Fermeture des portes
-centred: Mesurer la distance depuis le centre
+bugfixes: Corrections de bugs
+balance_changes: Modifications de l'équilibrage
+enemy_gates_closed: Éviter les portes ennemies
+enemy_gates_closed_tooltip: Les troupes évitent même les portes ennemies ouvertes. Cette règle et celles
+  des escaliers sont incompatibles avec le raccourci des assassins.
+centred: Distance depuis le centre
 reachable_only: Ignorer les ennemis sans accès à la porte
-reachable_only_tooltip: Les ennemis derrière un mur, des douves ou une falaise ne
-  ferment pas la porte si les zones sont séparées.
-walls_group: Portes et escaliers
+reachable_only_tooltip: Les ennemis derrière un mur, des douves ou une falaise ne ferment pas la porte
+  si les zones sont séparées.
 stairs_needed: Les troupes humaines doivent utiliser les escaliers
-stairs_needed_tooltip: Les troupes humaines ont besoin d’escaliers pour atteindre
-  les remparts et les toits des portes. Expérimental ; désactivé par défaut.
+stairs_needed_tooltip: Les troupes humaines ont besoin d’escaliers pour atteindre les remparts et les
+  toits des portes. Expérimental ; désactivé par défaut.
 stairs_needed_ai: Les troupes de l’IA doivent utiliser les escaliers
-stairs_needed_ai_tooltip: Appliquer la même règle à l’IA. Les châteaux sans escalier
-  risquent de laisser leurs remparts inoccupés.
+stairs_needed_ai_tooltip: Appliquer la même règle à l’IA. Les châteaux sans escalier risquent de laisser
+  leurs remparts inoccupés.
 assassins_climb: Les assassins grimpent toujours
-assassins_climb_tooltip: Les assassins escaladent les remparts avec leurs grappins ; la règle des escaliers ne s’applique pas à eux.
-damage_group: "Troupes sur les portes"
-large_gatehouse_damage: "Dégâts à distance sur une grande porte (%)"
-large_gatehouse_damage_tooltip: "Les troupes sur une grande porte subissent cette part des dégâts des flèches, carreaux et pierres de fronde. Elles tiennent plus longtemps sur une petite porte ; baissez cette valeur pour équilibrer. 100 = inchangé."
+assassins_climb_tooltip: Les assassins escaladent les remparts avec leurs grappins ; la règle des escaliers
+  ne s’applique pas à eux.
+large_gatehouse_damage: Dégâts à distance sur une grande porte (%)
+large_gatehouse_damage_tooltip: Les troupes sur une grande porte subissent cette part des dégâts des flèches,
+  carreaux et pierres de fronde. Elles tiennent plus longtemps sur une petite porte ; baissez cette valeur
+  pour équilibrer. 100 = inchangé.
+remember_blocked: Mémoriser les trajets bloqués (moins de saccades)
+remember_blocked_tooltip: 'Quand la règle des escaliers ne trouve aucun chemin pour une unité après avoir
+  essayé chaque corps de garde, ce même trajet est sauté un court moment pour les unités suivantes : elles
+  passent directement à la recherche normale du jeu. Une armée envoyée d''un coup ne fait plus saccader
+  le jeu.'
+remember_ticks: Mémoriser un trajet bloqué pendant (ticks de jeu)
+remember_ticks_tooltip: 100 ticks font environ deux secondes à vitesse normale.
+centred_tooltip: La porte se ferme à la même distance quel que soit le côté d’approche.
 tags.bugfixes: Corrections
 tags.balance: Équilibrage
-remember_blocked: "Mémoriser les trajets bloqués (moins de saccades)"
-remember_blocked_tooltip: "Quand la règle des escaliers ne trouve aucun chemin pour une unité après avoir essayé chaque corps de garde, ce même trajet est sauté un court moment pour les unités suivantes : elles passent directement à la recherche normale du jeu. Une armée envoyée d'un coup ne fait plus saccader le jeu."
-remember_ticks: "Mémoriser un trajet bloqué pendant (ticks de jeu)"
-remember_ticks_tooltip: "100 ticks font environ deux secondes à vitesse normale."

@@ -1,11 +1,3 @@
-# Gatehouse Fixes
+# Gatehouse Fixes 1.0.8
 
-Changes how troops use gatehouses and when gates close. Each change has its own switch. Requiring stairs to reach walls is optional and off by default.
-
-## Blocked trips are remembered
-
-With "stairs needed" on, a unit whose way is blocked has every gatehouse tried for it, one by
-one - a dozen route searches across the whole map. When an army is ordered somewhere at once,
-every soldier made that same hopeless trip, and the game stuttered. Now a trip that found no
-way is remembered for 100 game ticks (a setting), and the soldiers behind go straight to the
-game's own search.
+Make gatehouses close based on enemy distance from their center and help troops plan around enemy gates. Optional settings control access to gatehouse roofs and ranged damage to troops standing on large gatehouses.

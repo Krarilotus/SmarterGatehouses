@@ -3,98 +3,102 @@ meta:
 options:
 - url: smarter-gatehouses.pathing.enemy_gates_closed
   name: smarter-gatehouses-pathing-enemy-gates-closed
-  text: '{{enemy_gates_closed}}'
-  tooltip: '{{enemy_gates_closed_tooltip}}'
-  display: Switch
+  display: UCP2Switch
   contents:
     type: boolean
     value: true
   category:
   - '{{bugfixes}}'
+  header: '{{enemy_gates_closed}}'
+  text: '{{enemy_gates_closed_tooltip}}'
 - url: smarter-gatehouses.pathing.remember_blocked
   name: smarter-gatehouses-pathing-remember-blocked
-  text: '{{remember_blocked}}'
-  tooltip: '{{remember_blocked_tooltip}}'
-  display: Switch
+  display: UCP2Switch
   contents:
     type: boolean
     value: true
   category:
   - '{{bugfixes}}'
-- url: smarter-gatehouses.pathing.remember_ticks
-  name: smarter-gatehouses-pathing-remember-ticks
-  text: '{{remember_ticks}}'
-  tooltip: '{{remember_ticks_tooltip}}'
-  display: Number
+  header: '{{remember_blocked}}'
+  text: '{{remember_blocked_tooltip}}'
+  children:
+  - display: GroupBox
+    hasHeader: true
+    accordion:
+      enabled: true
+    header: '{{remember_ticks}}'
+    text: '{{remember_ticks_tooltip}}'
+    children:
+    - url: smarter-gatehouses.pathing.remember_ticks
+      name: smarter-gatehouses-pathing-remember-ticks
+      text: '{{remember_ticks}}'
+      display: Number
+      contents:
+        type: integer
+        value: 100
+        min: 10
+        max: 1000
+        step: 10
+- url: smarter-gatehouses.detection.centred
+  name: smarter-gatehouses-detection-centred
+  display: UCP2Switch
   contents:
-    type: integer
-    value: 100
-    min: 10
-    max: 1000
-    step: 10
+    type: boolean
+    value: true
+  header: '{{centred}}'
+  text: '{{centred_tooltip}}'
   category:
   - '{{bugfixes}}'
-- display: GroupBox
+- url: smarter-gatehouses.detection.reachable_only
+  name: smarter-gatehouses-detection-reachable-only
+  display: UCP2Switch
+  contents:
+    type: boolean
+    value: true
+  header: '{{reachable_only}}'
+  text: '{{reachable_only_tooltip}}'
   category:
   - '{{bugfixes}}'
-  header: '{{detection_group}}'
-  hasHeader: true
-  children:
-  - url: smarter-gatehouses.detection.centred
-    name: smarter-gatehouses-detection-centred
-    text: '{{centred}}'
-    display: Switch
-    contents:
-      type: boolean
-      value: true
-  - url: smarter-gatehouses.detection.reachable_only
-    name: smarter-gatehouses-detection-reachable-only
-    text: '{{reachable_only}}'
-    tooltip: '{{reachable_only_tooltip}}'
-    display: Switch
-    contents:
-      type: boolean
-      value: true
-- display: GroupBox
+- url: smarter-gatehouses.walls.stairs_needed
+  name: smarter-gatehouses-walls-stairs-needed
+  display: UCP2Switch
+  contents:
+    type: boolean
+    value: false
+  header: '{{stairs_needed}}'
+  text: '{{stairs_needed_tooltip}}'
   category:
   - '{{balance_changes}}'
-  header: '{{walls_group}}'
-  hasHeader: true
-  children:
-  - url: smarter-gatehouses.walls.stairs_needed
-    name: smarter-gatehouses-walls-stairs-needed
-    text: '{{stairs_needed}}'
-    tooltip: '{{stairs_needed_tooltip}}'
-    display: Switch
-    contents:
-      type: boolean
-      value: false
-  - url: smarter-gatehouses.walls.stairs_needed_ai
-    name: smarter-gatehouses-walls-stairs-needed-ai
-    text: '{{stairs_needed_ai}}'
-    tooltip: '{{stairs_needed_ai_tooltip}}'
-    display: Switch
-    contents:
-      type: boolean
-      value: false
-  - url: smarter-gatehouses.walls.assassins_climb
-    name: smarter-gatehouses-walls-assassins-climb
-    text: '{{assassins_climb}}'
-    tooltip: '{{assassins_climb_tooltip}}'
-    display: Switch
-    contents:
-      type: boolean
-      value: true
-- display: GroupBox
+- url: smarter-gatehouses.walls.stairs_needed_ai
+  name: smarter-gatehouses-walls-stairs-needed-ai
+  display: UCP2Switch
+  contents:
+    type: boolean
+    value: false
+  header: '{{stairs_needed_ai}}'
+  text: '{{stairs_needed_ai_tooltip}}'
   category:
   - '{{balance_changes}}'
-  header: '{{damage_group}}'
+- url: smarter-gatehouses.walls.assassins_climb
+  name: smarter-gatehouses-walls-assassins-climb
+  display: UCP2Switch
+  contents:
+    type: boolean
+    value: true
+  header: '{{assassins_climb}}'
+  text: '{{assassins_climb_tooltip}}'
+  category:
+  - '{{balance_changes}}'
+- display: GroupBox
   hasHeader: true
+  accordion:
+    enabled: true
+  header: '{{large_gatehouse_damage}}'
+  text: '{{large_gatehouse_damage_tooltip}}'
   children:
   - url: smarter-gatehouses.damage.large_gatehouse
     name: smarter-gatehouses-damage-large-gatehouse
     text: '{{large_gatehouse_damage}}'
-    tooltip: '{{large_gatehouse_damage_tooltip}}'
     display: Number
     contents:
       type: integer
@@ -102,3 +106,5 @@ options:
       min: 10
       max: 100
       step: 5
+  category:
+  - '{{balance_changes}}'

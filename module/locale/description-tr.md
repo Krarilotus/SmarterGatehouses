@@ -1,3 +1,3 @@
-# Gatehouse Fixes
+# Kapı kulesi düzeltmeleri 1.0.8
 
-Birliklerin kapıları kullanmasını ve kapıların kapanmasını değiştirir. Her değişikliğin ayrı bir anahtarı vardır. Surlara çıkmak için merdiven zorunluluğu isteğe bağlıdır ve varsayılan olarak kapalıdır.
+Kapılar düşmana eşit mesafeden tepki verir ve birlikler düşman kapılarını yol hesabına katar.

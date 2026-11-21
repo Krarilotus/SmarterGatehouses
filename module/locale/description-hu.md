@@ -1,3 +1,3 @@
-# Gatehouse Fixes
+# Kapuházjavítások 1.0.8
 
-Módosítja a kapuházakon való áthaladást és a kapuk bezárását. Minden változás külön kapcsolható. A falakra jutáshoz szükséges lépcsők szabálya alapból ki van kapcsolva.
+A kapuk egyenletes távolságban reagálnak, és az egységek útvonaltervezéskor figyelembe veszik az ellenséges kapukat.

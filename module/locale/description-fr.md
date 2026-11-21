@@ -1,3 +1,3 @@
-# Gatehouse Fixes
+# Corrections des portes fortifiées 1.0.8
 
-Modifie le passage par les portes et leur fermeture. Chaque changement a son propre réglage. L’obligation d’utiliser des escaliers pour atteindre les remparts est désactivée par défaut.
+Les portes réagissent aux ennemis à distance uniforme et les troupes tiennent compte des portes ennemies lors du calcul des trajets.

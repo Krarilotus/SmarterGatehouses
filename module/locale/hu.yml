@@ -1,28 +1,28 @@
 bugfixes: Bugfixes
 balance_changes: Balance Changes
-enemy_gates_closed: Az ellenséges kapuk zártnak számítanak
-enemy_gates_closed_tooltip: A csapatok a nyitott ellenséges kapukat is elkerülik.
-  A baráti és elfoglalt kapuk átjárhatók maradnak.
-detection_group: Kapuk bezárása
-centred: Távolság mérése a kapu közepétől
+enemy_gates_closed: Ellenséges kapuk kerülése
+enemy_gates_closed_tooltip: Az egységek a nyitott ellenséges kaput is kerülik. Ez és a lépcsőszabály nem
+  fér össze a bérgyilkosok rövidítésével.
+centred: Távolság a kapu közepétől
 reachable_only: Az elérhetetlen ellenségek figyelmen kívül hagyása
-reachable_only_tooltip: A fal, várárok vagy szikla mögötti ellenség nem zárja be a
-  kaput, ha a területek nem kapcsolódnak.
-walls_group: Kapuk és lépcsők
+reachable_only_tooltip: A fal, várárok vagy szikla mögötti ellenség nem zárja be a kaput, ha a területek
+  nem kapcsolódnak.
 stairs_needed: A játékos csapatainak lépcső kell
-stairs_needed_tooltip: A játékos csapatai csak lépcsőn jutnak a falakra és a kapuházak
-  tetejére. Kísérleti; alapból kikapcsolva.
+stairs_needed_tooltip: A játékos csapatai csak lépcsőn jutnak a falakra és a kapuházak tetejére. Kísérleti;
+  alapból kikapcsolva.
 stairs_needed_ai: Az MI csapatainak is lépcső kell
-stairs_needed_ai_tooltip: Ugyanez a szabály az MI-re. Lépcsők nélküli várak falai
-  katonák nélkül maradhatnak.
+stairs_needed_ai_tooltip: Ugyanez a szabály az MI-re. Lépcsők nélküli várak falai katonák nélkül maradhatnak.
 assassins_climb: Az orgyilkosok továbbra is másznak
 assassins_climb_tooltip: Az orgyilkosok kampóikkal másznak fel a falakra, rájuk nem vonatkozik a lépcsőszabály.
-damage_group: "Csapatok a kapuházakon"
-large_gatehouse_damage: "Távolsági sebzés nagy kapuházon (%)"
-large_gatehouse_damage_tooltip: "A nagy kapuház tetején álló csapatok a nyilak, nyílvesszők és parittyakövek sebzésének ennyi részét kapják. A kis kapuházon tovább bírják; csökkentse a kiegyenlítéshez. 100 = változatlan."
+large_gatehouse_damage: Távolsági sebzés nagy kapuházon (%)
+large_gatehouse_damage_tooltip: A nagy kapuház tetején álló csapatok a nyilak, nyílvesszők és parittyakövek
+  sebzésének ennyi részét kapják. A kis kapuházon tovább bírják; csökkentse a kiegyenlítéshez. 100 = változatlan.
+remember_blocked: Elzárt utak megjegyzése (kevesebb akadás)
+remember_blocked_tooltip: 'Ha a lépcsőszabály minden kapuház kipróbálása után sem talál utat egy egységnek,
+  ugyanazt az utat a következő egységeknél rövid ideig kihagyja: azok egyből a játék saját útkeresését
+  használják. Az egyszerre elküldött sereg már nem akasztja meg a játékot.'
+remember_ticks: Elzárt út megjegyzése ennyi ideig (játékütem)
+remember_ticks_tooltip: 100 ütem normál sebességen kb. két másodperc.
+centred_tooltip: A kapu minden oldalról azonos távolságban záródik.
 tags.bugfixes: Hibajavítások
 tags.balance: Egyensúly
-remember_blocked: "Elzárt utak megjegyzése (kevesebb akadás)"
-remember_blocked_tooltip: "Ha a lépcsőszabály minden kapuház kipróbálása után sem talál utat egy egységnek, ugyanazt az utat a következő egységeknél rövid ideig kihagyja: azok egyből a játék saját útkeresését használják. Az egyszerre elküldött sereg már nem akasztja meg a játékot."
-remember_ticks: "Elzárt út megjegyzése ennyi ideig (játékütem)"
-remember_ticks_tooltip: "100 ütem normál sebességen kb. két másodperc."

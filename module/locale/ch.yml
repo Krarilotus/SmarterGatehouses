@@ -1,24 +1,22 @@
 bugfixes: Bugfixes
 balance_changes: Balance Changes
-enemy_gates_closed: 将敌方城门视为关闭
-enemy_gates_closed_tooltip: 部队绕开敌方城门，即使城门敞开。己方、盟友和已占领的城门仍可通行。
-detection_group: 城门关闭
-centred: 从城门中心计算距离
+enemy_gates_closed: 避开敌方城门
+enemy_gates_closed_tooltip: 部队也会避开敞开的敌方城门。本规则和楼梯规则均与刺客抄近路冲突。
+centred: 从城门中心测距
 reachable_only: 忽略无法到达城门的敌人
 reachable_only_tooltip: 若区域不相通，墙、护城河或悬崖后的敌人不会使城门关闭。
-walls_group: 城门与阶梯
 stairs_needed: 玩家部队需要阶梯
 stairs_needed_tooltip: 玩家部队需要阶梯才能登上城墙和城门楼顶部。实验功能；默认关闭。
 stairs_needed_ai: AI部队也需要阶梯
 stairs_needed_ai_tooltip: 对AI使用相同规则。没有阶梯的城堡可能无法在城墙上驻军。
 assassins_climb: 刺客仍可攀爬
 assassins_climb_tooltip: 刺客用钩索攀爬城墙，不受阶梯规则限制。
-damage_group: "城门上的部队"
-large_gatehouse_damage: "大型城门上受到的远程伤害（%）"
-large_gatehouse_damage_tooltip: "站在大型城门顶部的部队受到箭矢、弩箭和投石的伤害为此比例。部队在小型城门上更耐打；降低此值可拉平差距。100 = 不变。"
+large_gatehouse_damage: 大型城门上受到的远程伤害（%）
+large_gatehouse_damage_tooltip: 站在大型城门顶部的部队受到箭矢、弩箭和投石的伤害为此比例。部队在小型城门上更耐打；降低此值可拉平差距。100 = 不变。
+remember_blocked: 记住受阻路线（减少卡顿）
+remember_blocked_tooltip: 当楼梯规则尝试所有门楼后仍找不到单位的路线时，后续单位会在短时间内跳过同一路线，直接使用游戏自带的寻路。一次派出整支军队不再让游戏卡顿。
+remember_ticks: 受阻路线记忆时长（游戏刻）
+remember_ticks_tooltip: 正常速度下 100 刻约为两秒。
+centred_tooltip: 敌军从任一方向接近时，触发关门的距离相同。
 tags.bugfixes: 错误修复
 tags.balance: 平衡
-remember_blocked: "记住受阻路线（减少卡顿）"
-remember_blocked_tooltip: "当楼梯规则尝试所有门楼后仍找不到单位的路线时，后续单位会在短时间内跳过同一路线，直接使用游戏自带的寻路。一次派出整支军队不再让游戏卡顿。"
-remember_ticks: "受阻路线记忆时长（游戏刻）"
-remember_ticks_tooltip: "正常速度下 100 刻约为两秒。"

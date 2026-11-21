@@ -1,28 +1,30 @@
 bugfixes: Bugfixes
 balance_changes: Balance Changes
-enemy_gates_closed: Tratar las puertas enemigas como cerradas
-enemy_gates_closed_tooltip: Las tropas rodean las puertas enemigas, aunque estén abiertas.
-  Las puertas amigas o capturadas siguen siendo transitables.
-detection_group: Cierre de puertas
-centred: Medir la distancia desde el centro
+enemy_gates_closed: Evitar puertas enemigas
+enemy_gates_closed_tooltip: Las tropas evitan incluso puertas enemigas abiertas. Esta regla y las de escaleras
+  son incompatibles con el atajo de asesinos.
+centred: Distancia desde el centro
 reachable_only: Ignorar enemigos sin acceso a la puerta
-reachable_only_tooltip: Los enemigos tras muros, fosos o acantilados no cierran la
-  puerta si sus zonas no están conectadas.
-walls_group: Puertas y escaleras
+reachable_only_tooltip: Los enemigos tras muros, fosos o acantilados no cierran la puerta si sus zonas
+  no están conectadas.
 stairs_needed: Las tropas humanas necesitan escaleras
-stairs_needed_tooltip: Las tropas humanas necesitan escaleras para subir a murallas
-  y puertas. Experimental; desactivado por defecto.
+stairs_needed_tooltip: Las tropas humanas necesitan escaleras para subir a murallas y puertas. Experimental;
+  desactivado por defecto.
 stairs_needed_ai: Las tropas de la IA necesitan escaleras
-stairs_needed_ai_tooltip: Aplicar la misma regla a la IA. Los castillos sin escaleras
-  pueden dejar sus murallas sin tropas.
+stairs_needed_ai_tooltip: Aplicar la misma regla a la IA. Los castillos sin escaleras pueden dejar sus
+  murallas sin tropas.
 assassins_climb: Los asesinos siguen trepando
-assassins_climb_tooltip: Los asesinos escalan las murallas con sus garfios; la regla de las escaleras no se les aplica.
-damage_group: "Tropas sobre puertas"
-large_gatehouse_damage: "Daño a distancia en puerta grande (%)"
-large_gatehouse_damage_tooltip: "Las tropas sobre una puerta grande reciben esta parte del daño de flechas, virotes y piedras de honda. Aguantan más en la puerta pequeña; bájalo para igualarlas. 100 = sin cambios."
+assassins_climb_tooltip: Los asesinos escalan las murallas con sus garfios; la regla de las escaleras
+  no se les aplica.
+large_gatehouse_damage: Daño a distancia en puerta grande (%)
+large_gatehouse_damage_tooltip: Las tropas sobre una puerta grande reciben esta parte del daño de flechas,
+  virotes y piedras de honda. Aguantan más en la puerta pequeña; bájalo para igualarlas. 100 = sin cambios.
+remember_blocked: Recordar rutas bloqueadas (menos tirones)
+remember_blocked_tooltip: 'Cuando la regla de escaleras no encuentra camino para una unidad tras probar
+  cada casa de guardia, la misma ruta se omite un momento para las siguientes unidades: usan directamente
+  la búsqueda normal del juego. Un ejército enviado de golpe ya no hace que el juego dé tirones.'
+remember_ticks: Recordar una ruta bloqueada durante (ticks de juego)
+remember_ticks_tooltip: 100 ticks son unos dos segundos a velocidad normal.
+centred_tooltip: La puerta se cierra a la misma distancia desde cualquier lado.
 tags.bugfixes: Correcciones
 tags.balance: Equilibrio
-remember_blocked: "Recordar rutas bloqueadas (menos tirones)"
-remember_blocked_tooltip: "Cuando la regla de escaleras no encuentra camino para una unidad tras probar cada casa de guardia, la misma ruta se omite un momento para las siguientes unidades: usan directamente la búsqueda normal del juego. Un ejército enviado de golpe ya no hace que el juego dé tirones."
-remember_ticks: "Recordar una ruta bloqueada durante (ticks de juego)"
-remember_ticks_tooltip: "100 ticks son unos dos segundos a velocidad normal."

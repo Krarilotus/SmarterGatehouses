@@ -1,3 +1,3 @@
-# Gatehouse Fixes
+# Correcciones de puertas fortificadas 1.0.8
 
-Cambia el paso de tropas por las puertas y cuándo se cierran. Cada cambio tiene su propio interruptor. Exigir escaleras para subir a las murallas es opcional y está desactivado por defecto.
+Las puertas responden a enemigos a una distancia uniforme y las tropas tienen en cuenta las puertas enemigas al buscar ruta.

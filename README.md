@@ -1,5 +1,16 @@
 # Smarter Gatehouses
 
+## UCP package
+
+Make gatehouses close based on enemy distance from their center and help troops plan around enemy gates. Optional settings control access to gatehouse roofs and ranged damage to troops standing on large gatehouses.
+
+- Package version: **1.0.8**
+- Module directory: `module/`
+- Targets: Stronghold Crusader 1.41 and Stronghold Crusader Extreme 1.41
+- Requires UCP framework 3.0.7 and frontend 1.0.2 or a compatible later version
+- Requires Map Extensions 1.x for map and save load callbacks
+
+
 A UCP3 module for Stronghold Crusader and Stronghold Crusader Extreme, shown in the UCP GUI as
 "Gatehouse Fixes" (UCP package integration and translations: Krarilotus, see `module/CREDITS.md`).
 Gatehouses close only for

@@ -228,7 +228,7 @@ local patched = {}
 ---@return number|nil
 local function scanOptional(pattern, purpose)
   local found, address = pcall(core.AOBScan, pattern)
-  if not found or address == nil then
+  if not found or not address or address == 0 then
     log(WARNING, "smarter-gatehouses: could not find " .. purpose
       .. "; the part of the module that needs it is off. Another module has probably "
       .. "patched the same code.")
@@ -353,6 +353,25 @@ return {
       return
     end
 
+    local routeSite
+    if enemyClosedOn or stairsOn or stairsAiOn then
+      routeSite = scanOptional(AOB_PATH_CALL, "the call that searches a unit's route")
+      if not routeSite then return end
+      local nextCall = core.scanForAOB(AOB_PATH_CALL, routeSite + 1)
+      local nextSearch = core.scanForAOB(AOB_DO_PATHFINDING, search + 1)
+      if (nextCall and nextCall ~= 0) or (nextSearch and nextSearch ~= 0) then
+        error("smarter-gatehouses: the route call or original search signature is ambiguous")
+      end
+      local call = routeSite + PATH_CALL
+      if readByte(call) & 0xFF ~= 0xE8
+          or (call + 5 + readInteger(call + 1)) & 0xFFFFFFFF ~= search then
+        error("smarter-pathing.assassinsShortcut cannot be combined with "
+      .. "smarter-gatehouses.pathing.enemy_gates_closed, smarter-gatehouses.walls.stairs_needed "
+      .. "or smarter-gatehouses.walls.stairs_needed_ai. Disable the assassin shortcut or all three "
+      .. "gate route options. The native route call may also be occupied by another module.")
+      end
+    end
+
     local buildings = (readAddress(linkGates + LINK_BUILDING_X_OPERAND) - BUILDING_X)
       & 0xFFFFFFFF
     local linkage = readAddress(linkGates + LINK_LAYER_OPERAND)
@@ -405,8 +424,8 @@ return {
     -- Route finding
     ---------------------------------------------------------------------------------
 
-    if enemyClosedOn or stairsOn or stairsAiOn then
-      local site = scanOptional(AOB_PATH_CALL, "the call that searches a unit's route")
+    if routeSite then
+      local site = routeSite
       local teamSite = scanOptional(AOB_PLAYER_TEAMS, "the team of each player")
       local layers = scanOptional(AOB_TILE_LAYERS, "the tile layers")
       local aicSite = scanOptional(AOB_PLAYER_AIC, "which players are human")
@@ -414,7 +433,7 @@ return {
         local playerAic = readAddress(aicSite + PLAYER_AIC_OPERAND)
         local pathfinding = readAddress(site + PATH_STATE_OPERAND)
         local call = site + PATH_CALL
-        local doPathfinding = (call + 5 + readInteger(call + 1)) & 0xFFFFFFFF
+        local doPathfinding = search
 
         local cutSides = core.allocateAssembly(templates.cut_sides .. cutMasks(), {
           CUT_X = control + C.CUT_X,
@@ -537,6 +556,17 @@ return {
         local ticksSite = rememberOn and scanOptional(AOB_TICKS, "the game's tick counter") or nil
         local blocked = core.allocate(BLOCKED_ENTRIES * 12 + 32, true)
         local remember = blocked + BLOCKED_ENTRIES * 12
+        if ticksSite ~= nil then
+          local function resetBlockedTrips()
+            core.setMemory(blocked, 0, BLOCKED_ENTRIES * 12)
+            core.setMemory(remember + 8, 0, 20)
+          end
+          modules["map-extensions"]:registerSection("smarter-gatehouses", {
+            initialize = resetBlockedTrips,
+            deserialize = resetBlockedTrips,
+            serialize = function() end,
+          })
+        end
         writeInteger(remember, ticksSite ~= nil and 1 or 0)
         local ticks = config.pathing and tonumber(config.pathing.remember_ticks)
           or DEFAULTS.pathing.remember_ticks

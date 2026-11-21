@@ -58,7 +58,8 @@ class Host:
 
         c = lua.table()
         c[b'AOBScan'] = self.scan
-        c[b'scanForAOB'] = self.scan
+        c[b'scanForAOB'] = lambda pattern, start=0: next((
+            hit for hit in self.E.find(pattern.decode('ascii')) if hit >= start), 0)
         c[b'readInteger'] = lambda a: self.m.s32(int(a))
         c[b'readSmallInteger'] = lambda a: struct.unpack('<h', self.m.read(int(a), 2))[0]
         c[b'readByte'] = lambda a: struct.unpack('<b', self.m.read(int(a), 1))[0]
@@ -104,6 +105,13 @@ class Host:
             registry[b'textResourceModifier'] = trm
             g[b'modules'] = registry
 
+        self.callbacks = {}
+        registry = g[b'modules'] or lua.table()
+        maps = lua.table()
+        maps[b'registerSection'] = lambda _, name, callbacks: self.callbacks.__setitem__(name, callbacks)
+        registry[b'map-extensions'] = maps
+        g[b'modules'] = registry
+        c[b'setMemory'] = lambda a, v, n: self.m.write(a, bytes([v]) * n)
         self.mod = lua.eval(b'dofile')((MODULE + r'\init.lua').encode('mbcs'))
         self.mod[b'enable'](self.mod, self.to_lua(config or {}))
 

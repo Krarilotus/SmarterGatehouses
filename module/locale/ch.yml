@@ -1,22 +1,24 @@
-bugfixes: Bugfixes
-balance_changes: Balance Changes
-enemy_gates_closed: 避开敌方城门
-enemy_gates_closed_tooltip: 部队也会避开敞开的敌方城门。本规则和楼梯规则均与刺客抄近路冲突。
-centred: 从城门中心测距
-reachable_only: 忽略无法到达城门的敌人
-reachable_only_tooltip: 若区域不相通，墙、护城河或悬崖后的敌人不会使城门关闭。
-stairs_needed: 玩家部队需要阶梯
-stairs_needed_tooltip: 玩家部队需要阶梯才能登上城墙和城门楼顶部。实验功能；默认关闭。
-stairs_needed_ai: AI部队也需要阶梯
-stairs_needed_ai_tooltip: 对AI使用相同规则。没有阶梯的城堡可能无法在城墙上驻军。
-assassins_climb: 刺客仍可攀爬
-assassins_climb_tooltip: 刺客用钩索攀爬城墙，不受阶梯规则限制。
-large_gatehouse_damage: 大型城门上受到的远程伤害（%）
-large_gatehouse_damage_tooltip: 站在大型城门顶部的部队受到箭矢、弩箭和投石的伤害为此比例。部队在小型城门上更耐打；降低此值可拉平差距。100 = 不变。
+bugfixes: 错误修复
+balance_changes: 平衡性改动
+enemy_gates_closed: 将敌方城门视为关闭
+enemy_gates_closed_tooltip: |-
+  部队会绕开敌方城门（包括敞开的城门）；友方及已占领的城门仍可通行。不能与 Smarter Pathing 中的刺客捷径同时启用；启用任意阶梯规则时亦同。
+centred: 从城门中心测量关门距离
+reachable_only: 忽略无法抵达城门的敌人
+reachable_only_tooltip: 若区域互不相通，城墙、护城河或悬崖另一侧的敌人不会触发关门。
+stairs_needed: 人类玩家部队需要阶梯
+stairs_needed_tooltip: 人类玩家部队需要通过阶梯才能登上城墙和城门楼顶部。实验性功能；默认关闭。
+stairs_needed_ai: AI 部队也需要阶梯
+stairs_needed_ai_tooltip: 对 AI 玩家应用相同规则。未建阶梯的城堡可能会出现城墙无人驻守的情况。
+assassins_climb: 刺客仍可攀爬城墙
+assassins_climb_tooltip: 刺客使用钩索攀爬城墙，不受阶梯规则限制。
+large_gatehouse_damage: 大型城门楼承受的远程伤害（%）
+large_gatehouse_damage_tooltip: 站在大型城门楼顶部的部队受到箭矢、弩箭和投石伤害的比例。部队在小型城门楼上更耐打；调低此值可拉平差距。100 = 不变。
 remember_blocked: 记住受阻路线（减少卡顿）
-remember_blocked_tooltip: 当楼梯规则尝试所有门楼后仍找不到单位的路线时，后续单位会在短时间内跳过同一路线，直接使用游戏自带的寻路。一次派出整支军队不再让游戏卡顿。
-remember_ticks: 受阻路线记忆时长（游戏刻）
+remember_blocked_tooltip: |-
+  当阶梯规则尝试所有城门后仍无法为单位找到路线时，后续单位会在短时间内跳过同一路线，直接使用游戏自带寻路。同时调动整支军队时不再引起卡顿。
+remember_ticks: 记住受阻路线的时长（游戏刻）
 remember_ticks_tooltip: 正常速度下 100 刻约为两秒。
-centred_tooltip: 敌军从任一方向接近时，触发关门的距离相同。
+centred_tooltip: 从城门楼中心测距，使敌人从任一方向接近都在相同距离触发关门。
 tags.bugfixes: 错误修复
 tags.balance: 平衡

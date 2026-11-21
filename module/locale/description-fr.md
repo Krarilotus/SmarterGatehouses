@@ -1,3 +1,3 @@
 # Corrections des portes fortifiées 1.0.8
 
-Les portes réagissent aux ennemis à distance uniforme et les troupes tiennent compte des portes ennemies lors du calcul des trajets.
+Fait fermer les portes selon la distance des ennemis par rapport à leur centre et aide les troupes à contourner les portes ennemies. Des options supplémentaires règlent l'accès aux toits des portes et les dégâts à distance sur les grandes portes.

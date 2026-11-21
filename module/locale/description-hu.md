@@ -1,3 +1,3 @@
 # Kapuházjavítások 1.0.8
 
-A kapuk egyenletes távolságban reagálnak, és az egységek útvonaltervezéskor figyelembe veszik az ellenséges kapukat.
+A kapuházak a középpontjuktól mért ellenséges távolság alapján záródnak, és a csapatok megkerülik az ellenséges kapukat. Opcionális beállítások szabályozzák a kapuháztetőkre való feljutást és a nagy kapuházon elszenvedett távolsági sebzést.

@@ -827,7 +827,7 @@ call SHUT_GATES
 push dword [esp+28]
 push dword [esp+28]
 mov ecx, PATHFINDING
-call DO_PATHFINDING
+call dword [NEXT]
 push eax
 call REOPEN_GATES
 pop eax
@@ -1283,10 +1283,13 @@ ret
 ---------------------------------------------------------------------------------------
 -- Route finding: the wrapper
 ---------------------------------------------------------------------------------------
--- Stands in for the call to PathFindingState::doPathfinding(player, flag) in
--- UnitsState::setDestinationForUnit, the one place a unit's route is searched. ECX is the
--- PathFindingState, whose +8 / +0xC is the tile the unit stands on and +0x10 / +0x14 the
--- tile it wants to reach; ESI is the unit (UnitsState + index * 0x490).
+-- A route-search policy (order 200) for UnitsState::setDestinationForUnit's call of
+-- PathFindingState::doPathfinding(player, flag), the one place a unit's route is searched.
+-- It is called like that function. ECX is the PathFindingState, whose +8 / +0xC is the tile
+-- the unit stands on and +0x10 / +0x14 the tile it wants to reach. [UNIT] is the unit
+-- (UnitsState + index * 0x490), kept there by route-search; it is loaded into ESI, which is
+-- saved first. Every search below goes on through [NEXT], the rest of route-search's chain
+-- (the game's search, or a policy closer to it).
 --
 -- With "stairs needed" on, both ends are sorted into ground, high (wall, tower) or
 -- gatehouse. A unit on a gatehouse tile that is walking through the passage counts as on
@@ -1315,6 +1318,8 @@ ret
 --
 -- high_at(eax = x, ecx = y) returns 0 ground, 1 high, 2 gatehouse; bld_at the building.
 local path_search = [[
+push esi
+mov esi, [UNIT]
 push ebx
 push edi
 push ebp
@@ -1417,8 +1422,8 @@ je search
 mov [LEG_GATE], eax
 mov [LEG_DONE], eax
 push ecx
-push dword [esp+24]
-push dword [esp+24]
+push dword [esp+28]
+push dword [esp+28]
 call TWO_LEGS
 cmp eax, -1
 je search
@@ -1469,8 +1474,8 @@ je s_case
 mov ecx, 2
 s_case:
 push ecx
-push dword [esp+24]
-push dword [esp+24]
+push dword [esp+28]
+push dword [esp+28]
 call TWO_LEGS
 test eax, eax
 jg done
@@ -1518,16 +1523,17 @@ done:
 pop ebp
 pop edi
 pop ebx
+pop esi
 ret 8
 
 do_search:
 push ebx
-push dword [esp+24]
+push dword [esp+28]
 call SHUT_GATES
 mov ecx, ebp
-push dword [esp+24]
-push dword [esp+24]
-call DO_PATHFINDING
+push dword [esp+28]
+push dword [esp+28]
+call dword [NEXT]
 push eax
 call REOPEN_GATES
 pop eax

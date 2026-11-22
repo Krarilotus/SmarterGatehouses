@@ -50,10 +50,13 @@ local DETECT_GUARDS = {
 }
 
 -- UnitsState::setDestinationForUnit, where it calls PathFindingState::doPathfinding with
--- the unit's owner: the one place a unit's route is searched.
+-- the unit's owner: the one place a unit's route is searched. That call belongs to the
+-- route-search module; the route rules are one of its policies. Order 200: they change what
+-- a single search sees, so they run inside policies that compare candidate searches (Smarter
+-- Pathing's assassin shortcut, 100). Only read here: the PathFindingState it is called on.
 local AOB_PATH_CALL = "0F BF 8E AA 06 00 00 8B 44 24 14 50 51 B9 ? ? ? ? E8 ? ? ? ?"
 local PATH_STATE_OPERAND = 14                 -- mov ecx, PathFindingState
-local PATH_CALL = 18
+local ROUTE_POLICY = { id = "smarter-gatehouses.routeRules", order = 200 }
 
 -- PathFindingState::doPathfinding. Only read: the row table and the area map.
 local AOB_DO_PATHFINDING = "56 8B F1 8B 46 0C 8B 4E 14 8D 04 40 8B 04 85 ? ? ? ? 03 46 08 8D "
@@ -353,7 +356,7 @@ return {
       return
     end
 
-    local routeSite
+    local routeSite, routes, route
     if enemyClosedOn or stairsOn or stairsAiOn then
       routeSite = scanOptional(AOB_PATH_CALL, "the call that searches a unit's route")
       if not routeSite then return end
@@ -362,14 +365,13 @@ return {
       if (nextCall and nextCall ~= 0) or (nextSearch and nextSearch ~= 0) then
         error("smarter-gatehouses: the route call or original search signature is ambiguous")
       end
-      local call = routeSite + PATH_CALL
-      if readByte(call) & 0xFF ~= 0xE8
-          or (call + 5 + readInteger(call + 1)) & 0xFFFFFFFF ~= search then
-        error("smarter-pathing.assassinsShortcut cannot be combined with "
-      .. "smarter-gatehouses.pathing.enemy_gates_closed, smarter-gatehouses.walls.stairs_needed "
-      .. "or smarter-gatehouses.walls.stairs_needed_ai. Disable the assassin shortcut or all three "
-      .. "gate route options. The native route call may also be occupied by another module.")
+      -- Registered before anything is changed: if route-search cannot take the route search,
+      -- it says why and the game stays as it is.
+      routes = modules["route-search"]
+      if not routes or (routes.version or 0) < 1 then
+        error("smarter-gatehouses: the gate route rules need the route-search module (version 1)")
       end
+      route = routes:addPolicy(ROUTE_POLICY)
     end
 
     local buildings = (readAddress(linkGates + LINK_BUILDING_X_OPERAND) - BUILDING_X)
@@ -432,8 +434,6 @@ return {
       if site ~= nil and teamSite ~= nil and layers ~= nil and aicSite ~= nil then
         local playerAic = readAddress(aicSite + PLAYER_AIC_OPERAND)
         local pathfinding = readAddress(site + PATH_STATE_OPERAND)
-        local call = site + PATH_CALL
-        local doPathfinding = search
 
         local cutSides = core.allocateAssembly(templates.cut_sides .. cutMasks(), {
           CUT_X = control + C.CUT_X,
@@ -531,7 +531,7 @@ return {
           SAVE_B = control + C.SAVE_B,
           SHUT_GATES = prepare,
           REOPEN_GATES = restore,
-          DO_PATHFINDING = doPathfinding,
+          NEXT = route.next,
           ROW_TABLE = rowTable,
           AREA_MAP = areaMap,
         }
@@ -619,14 +619,15 @@ return {
           SPECIAL_P = control + C.SPECIAL_P,
           SHUT_GATES = prepare,
           REOPEN_GATES = restore,
-          DO_PATHFINDING = doPathfinding,
+          NEXT = route.next,
+          UNIT = route.unit,
           ROW_TABLE = rowTable,
           BUILDING_MAP = buildingMap,
           BUILDINGS = buildings,
           GATE_OR_TOWER = gateOrTower,
           TILE_FLAGS = tileFlags,
         })
-        patch(call, branch(0xE8, call, pathSearch, 5))
+        routes:enablePolicy(ROUTE_POLICY.id, pathSearch)
 
         local cursorSite = (stairsOn or stairsAiOn)
           and scanOptional(AOB_MOVE_CURSOR, "the troops' move cursor") or nil

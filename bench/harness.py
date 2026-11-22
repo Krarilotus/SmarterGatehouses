@@ -60,8 +60,9 @@ class Host:
 
         c = lua.table()
         c[b'AOBScan'] = self.scan
-        c[b'scanForAOB'] = lambda pattern, start=0: next((
-            hit for hit in self.E.find(pattern.decode('ascii')) if hit >= start), 0)
+        c[b'scanForAOB'] = lambda pattern, start=0, stop=None: next((
+            hit for hit in self.E.find(pattern.decode('ascii'))
+            if hit >= start and (stop is None or hit < stop)), 0)
         c[b'readInteger'] = lambda a: self.m.s32(int(a))
         c[b'readSmallInteger'] = lambda a: struct.unpack('<h', self.m.read(int(a), 2))[0]
         c[b'readByte'] = lambda a: struct.unpack('<b', self.m.read(int(a), 1))[0]

@@ -1,7 +1,12 @@
 """Run a resource-grid-overlay build inside lupa with core mocked onto an emulated 32 bit
 address space, so its assembly and the game's own drawing code really execute."""
 import re, struct, hashlib, sys
-import lupa, keystone
+import os
+import lupa
+try:
+    import keystone          # only for USE_FASM = False
+except ImportError:
+    keystone = None
 sys.path.insert(0, r'C:\Users\MONSTE~1\AppData\Local\Temp\shcw')
 sys.path.insert(0, r'C:\Users\MONSTE~1\AppData\Local\Temp\shcw\perf')
 from shc import Exe, G
@@ -36,7 +41,7 @@ HEAP = 0x60000000
 STACK_TOP = 0x70100000
 SENTINEL = 0x7FFFFFF0
 
-KS = keystone.Ks(keystone.KS_ARCH_X86, keystone.KS_MODE_32)
+KS = keystone.Ks(keystone.KS_ARCH_X86, keystone.KS_MODE_32) if keystone else None
 
 
 def fasm_to_keystone(script, values):
@@ -61,7 +66,11 @@ FASM_SCRIPT = 'fasm32_margin.ps1'   # UCP's real buffer is 64000 bytes; the benc
                                     # game. A script that outgrows it fails inside
                                     # enable(), and the game never starts.
 PERF_DIR = r'C:\Users\MONSTE~1\AppData\Local\Temp\shcw\perf'
-FASM_CACHE = PERF_DIR + r'\fasm_cache'
+FASM_CACHE = os.environ.get('BENCH_FASM_CACHE', PERF_DIR + r'\fasm_cache')
+# FASM_EXE: assemble with fasm.exe instead of UCP's fasm.dll (same assembler), limited to
+# FASM_EXE_KB kilobytes of memory (default 57, close to the 57600 bytes above).
+FASM_EXE = os.environ.get('FASM_EXE')
+FASM_EXE_KB = os.environ.get('FASM_EXE_KB', '57')
 POWERSHELL32 = r'C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe'
 
 
@@ -76,15 +85,23 @@ def ucp_source(script, values, origin):
 def fasm(source):
     import os, subprocess, tempfile
     os.makedirs(FASM_CACHE, exist_ok=True)
-    digest = hashlib.sha1((FASM_SCRIPT + source).encode('ascii')).hexdigest()
+    digest = hashlib.sha1(((FASM_EXE and 'exe' + FASM_EXE_KB or FASM_SCRIPT) + source)
+                          .encode('ascii')).hexdigest()
     binary = os.path.join(FASM_CACHE, digest + '.bin')
     if not os.path.exists(binary):
         work = tempfile.mkdtemp(dir=FASM_CACHE)
         with open(os.path.join(work, digest + '.asm'), 'w', newline='\n') as f:
             f.write(source)
-        subprocess.run([POWERSHELL32, '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File',
-                        PERF_DIR + '\\' + FASM_SCRIPT, '-dir', work],
-                       check=True, capture_output=True)
+        if FASM_EXE:
+            done = subprocess.run([FASM_EXE, os.path.join(work, digest + '.asm'),
+                                   os.path.join(work, digest + '.bin'), '-m', FASM_EXE_KB],
+                                  capture_output=True, text=True)
+            if done.returncode:
+                raise AssertionError('FASM: ' + (done.stdout + done.stderr).strip())
+        else:
+            subprocess.run([POWERSHELL32, '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File',
+                            PERF_DIR + '\\' + FASM_SCRIPT, '-dir', work],
+                           check=True, capture_output=True)
         produced = os.path.join(work, digest + '.bin')
         if not os.path.exists(produced):
             error = open(os.path.join(work, digest + '.err')).read()

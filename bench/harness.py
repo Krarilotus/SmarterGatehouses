@@ -19,6 +19,8 @@ from host import fasm, ucp_source
 
 MODULE = os.environ.get('TUNNELERS_MODULE',
                         r'H:\shc-modding\improved-tunnelers\module')
+# The route-search module folder (Krarilotus/ucp3-fixes route-search/).
+ROUTE_SEARCH = os.environ.get('ROUTE_SEARCH_MODULE')
 VAN_PATH = G + r'\Stronghold Crusader.exe'
 EXT_PATH = G + r'\Stronghold_Crusader_Extreme.exe'
 HEAP = 0x60000000
@@ -112,6 +114,12 @@ class Host:
         registry[b'map-extensions'] = maps
         g[b'modules'] = registry
         c[b'setMemory'] = lambda a, v, n: self.m.write(a, bytes([v]) * n)
+        # The route-search module (a dependency), from ROUTE_SEARCH_MODULE, enabled first.
+        self.routes = None
+        if ROUTE_SEARCH:
+            self.routes = lua.eval(b'dofile')((ROUTE_SEARCH + r'\init.lua').encode('mbcs'))
+            self.routes[b'enable'](self.routes, lua.table())
+            registry[b'route-search'] = self.routes
         self.mod = lua.eval(b'dofile')((MODULE + r'\init.lua').encode('mbcs'))
         self.mod[b'enable'](self.mod, self.to_lua(config or {}))
 

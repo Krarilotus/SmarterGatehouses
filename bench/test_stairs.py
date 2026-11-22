@@ -519,5 +519,138 @@ def section10(extreme):
 
 for extreme in (False, True):
     section10(extreme)
+PATHING = os.environ.get('SMARTER_PATHING_MODULE')
+FINAL_DESTINATION_AOB = "66 89 AE 00 07 00 00 66 89 BE 02 07 00 00 66 89 9E 08 0A 00 00"
+
+
+def with_shortcut(W):
+    """Smarter Pathing's assassin shortcut on top, as route-search's order 100 policy. Returns
+    the climb flag and route-search's [unit]."""
+    H = W.H
+    H.lua.execute(('package.loaded["templates"] = nil; package.path = [[%s\\?.lua;]] .. package.path'
+                   % PATHING).encode('mbcs'))
+    mod = H.lua.eval(b'dofile')((PATHING + r'\init.lua').encode('mbcs'))
+    mod[b'enable'](mod, H.to_lua({
+        'assassinsShortcut': True, 'assassinsResume': False, 'ignoreQuarryPiles': False,
+        'workersUnstuck': False, 'workersJobsUnstuck': False, 'rebuildLimit': False,
+        'shortcutGroundSteps': 30, 'shortcutSavingPercent': 25}))
+    flag = H.E.u32(H.E.find(FINAL_DESTINATION_AOB)[0] + 0x9D + 2)
+    assert flag == W.pf + 0x80, 'the climb flag is PathFindingState + 0x80'
+    order = [p[b'id'] for p in H.routes[b'policies'](H.routes).values()]
+    assert order == [b'smarter-pathing.assassinsShortcut', b'smarter-gatehouses.routeRules'], order
+    call = W.pathcall + 18
+    head = (call + 5 + H.m.s32(call + 1)) & MASK
+    return flag, H.u32(head + 2)
+
+
+def recorder(W, log, flag, unit):
+    """The game's search: notes what it was called with and writes a plan of its own."""
+    H = W.H
+    def fake(cpu):
+        index = len(log)
+        log.append(dict(ecx=cpu.r['ecx'], esi=cpu.r['esi'], unit=H.u32(unit), climb=H.u32(flag),
+                        args=[cpu.m.u32(cpu.r['esp'] + 4 + 4 * i) for i in range(2)],
+                        state=H.m.read(W.bld + GATE * 0x32C + 0x2A2, 1)[0]))
+        r = W.results.pop(0) if W.results else 7
+        buf = H.u32(W.pf + 0x1BB38)
+        H.m.write(buf, bytes([0x10 + index]) * 0x190)
+        H.put32(W.pf + 0x1BB3C, r)
+        cpu.r['eax'] = r
+        cpu.eip = cpu.pop()
+        cpu.r['esp'] = (cpu.r['esp'] + 8) & MASK
+    return fake
+
+
+def section11(extreme):
+    print('11. with Smarter Pathing\'s assassin shortcut outside (route-search 100 -> 200)')
+    if not PATHING:
+        print('   skipped: set SMARTER_PATHING_MODULE to Smarter Pathing\'s module folder')
+        return
+    W = World(extreme, cfg())
+    W.gate(); W.lay()
+    H = W.H
+    flag, unit = with_shortcut(W)
+    H.put32(W.pf + 0x1BB38, 0x51000000)
+    log = []
+    H.cpu.hooks[W.dopath] = recorder(W, log, flag, unit)
+    esi = 0x50000000
+    def trip(climbs, results):
+        log.clear()
+        W.results = list(results)
+        H.put32(flag, 1 if climbs else 0)
+        H.put16(esi + 0x6AA, 1)
+        H.put32(W.pf + 8, 50); H.put32(W.pf + 0xC, 95); H.put32(W.pf + 0x10, 60); H.put32(W.pf + 0x14, 95)
+        regs = {'esi': esi, 'ebx': 0, 'edi': 0x2222, 'ebp': 0x3333}
+        cpu = H.run(W.pathcall, until=W.pathcall + 25, regs=regs, stack=[0, 0, 0, 0, 0x55, 0])
+        assert (cpu.r['ebx'], cpu.r['edi'], cpu.r['ebp'], cpu.r['esi']) == (0, 0x2222, 0x3333, esi)
+        assert cpu.r['esp'] == harness.STACK_TOP - 7 * 4, 'stack not balanced'
+        return cpu.r['eax']
+    seen = lambda: [(c['unit'], c['esi'], c['state'], c['climb'], c['ecx'], c['args']) for c in log]
+    eax = trip(False, [12])
+    check('anyone else: one search, enemy gate shut, for the unit',
+          (eax, seen()), (12, [(esi, esi, 2, 0, W.pf, [1, 0x55])]))
+    eax = trip(True, [10])
+    check('assassin, short walk: one ground search, gate shut', (eax, seen()), (10, [(esi, esi, 2, 0, W.pf, [1, 0x55])]))
+    eax = trip(True, [50, 20])
+    check('assassin, long walk, climb much shorter: ground then climb, each for the unit, gate shut',
+          (eax, seen()), (20, [(esi, esi, 2, 0, W.pf, [1, 0x55]), (esi, esi, 2, 1, W.pf, [1, 0x55])]))
+    check('   the climbing plan is kept', H.m.read(0x51000000, 1)[0], 0x11)
+    eax = trip(True, [50, 45])
+    check('assassin, climb not shorter enough: the ground route and its plan come back',
+          (eax, len(log), H.u32(W.pf + 0x1BB3C), H.m.read(0x51000000, 1)[0]), (50, 2, 50, 0x10))
+    eax = trip(True, [0, 0])
+    check('no route either way: no route', (eax, len(log)), (0, 2))
+    check('   enemy gate open again, no unit left in route-search', (H.m.read(W.bld + GATE * 0x32C + 0x2A2, 1)[0], H.u32(unit)), (0, 0))
+
+    # The stairs rule inside a candidate: section 6's unit in the passage, onto the roof.
+    W = World(extreme, cfg(enemy=False, stairs=True) | {
+        'pathing': {'enemy_gates_closed': False, 'remember_blocked': False},
+        'walls': {'stairs_needed': True, 'stairs_needed_ai': False, 'assassins_climb': False}})
+    W.gate(); W.lay()
+    H = W.H
+    flag, unit = with_shortcut(W)
+    H.put32(W.pf + 0x1BB38, 0x51000000)
+    for x, y in [(50, 95), (60, 95), (GX - 1, GY + 2)]:
+        W.area_set(x, y, 1)
+    W.area_set(GX + 5, GY + 2, 3)
+    for j in range(5):
+        for i in range(5):
+            W.area_set(GX + i, GY + j, 3)
+    W.climb(1, 4, GATE, 1, 3, 3)
+    H.put8(W.linkage + W.tile(GX + 2, GY - 1), 0x10)
+    H.put32(W.flags + W.tile(GX + 2, GY - 1) * 4, 0x100); W.area_set(GX + 2, GY - 1, 3)
+    H.put8(W.linkage + W.tile(GX + 2, GY), W.link_at(GX + 2, GY) | 0x01)
+    log = []
+    plan = planner(W, log)
+    units = []
+    def planned(cpu):
+        units.append((H.u32(unit), H.u32(flag)))
+        plan(cpu)
+    H.cpu.hooks[W.dopath] = planned
+    ROOF, IN = (GX + 2, GY + 1), (GX + 5, GY + 2)
+    u = W.unit(8, (GX + 2, GY + 2), passage=10)
+    H.put16(u + 0x8E, 0x49)
+    H.m.write(u + 0xEC, struct.pack('<hh', *ROOF))     # the order's destination, as the game set it
+    H.put16(u + 0x2D2, 0x1234)
+    H.put16(u + 0xF6, 2)
+    H.put32(flag, 1)
+    calls, eax = W.search2(8, ROOF, results=[0])
+    legs = [(c['start'], c['dest']) for c in log]
+    check('assassin in the passage, onto the roof: the ground candidate fails, the climbing one '
+          'takes two legs', (eax > 0, legs[-2:], walk(W, (GX + 2, GY + 2), eax)), (True, [((GX + 2, GY + 2), IN), (IN, ROOF)], ROOF))
+    check('   every search for this unit', set(units), {(u - 0x614, 0), (u - 0x614, 1)})
+    check('   the failed candidate\'s stop is undone: order destination and +0x2D2 as before',
+          (struct.unpack('<hh', H.m.read(u + 0xEC, 4)), H.m.read(u + 0x2D2, 2)), (ROOF, b'\x34\x12'))
+    H.put32(flag, 0)
+    units.clear()
+    calls, eax = W.search2(8, ROOF, results=[0])
+    check('   an order without the climb choice: the gate rules alone, the unit stops where it is',
+          (eax, set(units), struct.unpack('<hh', H.m.read(u + 0xEC, 4)), H.m.read(u + 0x2D2, 2)),
+          (0, {(u - 0x614, 0)}, (GX + 2, GY + 2), b'\x00\x00'))
+
+
+for extreme in (False, True):
+    section11(extreme)
+
 print()
 print('FAILURES: %s' % ', '.join(FAILS) if FAILS else 'ALL OK')

@@ -1,5 +1,6 @@
-import pefile, capstone, re, struct
-G = r"H:\steam\steamapps\common\Stronghold Crusader Extreme UCP3 new"
+import os, pefile, capstone, re, struct
+# The folder with both 1.41 executables (read only); SHC_GAME_DIR overrides it.
+G = os.environ.get("SHC_GAME_DIR", r"H:\steam\steamapps\common\Stronghold Crusader Extreme UCP3 new")
 class Exe:
     def __init__(self, path):
         pe = pefile.PE(path, fast_load=True); self.data = open(path,'rb').read()

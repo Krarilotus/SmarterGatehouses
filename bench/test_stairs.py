@@ -535,7 +535,7 @@ def with_shortcut(W):
         'workersUnstuck': False, 'workersJobsUnstuck': False, 'rebuildLimit': False,
         'shortcutGroundSteps': 30, 'shortcutSavingPercent': 25}))
     flag = H.E.u32(H.E.find(FINAL_DESTINATION_AOB)[0] + 0x9D + 2)
-    assert flag == W.pf + 0x80, 'the climb flag is PathFindingState + 0x80'
+    assert flag == W.pf + 0x88, 'the assassin climb flag is PathFindingState + 0x88'
     order = [p[b'id'] for p in H.routes[b'policies'](H.routes).values()]
     assert order == [b'smarter-pathing.assassinsShortcut', b'smarter-gatehouses.routeRules'], order
     call = W.pathcall + 18

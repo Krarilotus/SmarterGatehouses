@@ -65,7 +65,7 @@ class Host:
             if hit >= start and (stop is None or hit < stop)), 0)
         c[b'readInteger'] = lambda a: self.m.s32(int(a))
         c[b'readSmallInteger'] = lambda a: struct.unpack('<h', self.m.read(int(a), 2))[0]
-        c[b'readByte'] = lambda a: struct.unpack('<b', self.m.read(int(a), 1))[0]
+        c[b'readByte'] = lambda a: self.m.read(int(a), 1)[0]           # unsigned, as the framework's
         c[b'readBytes'] = lambda a, n: lua.table_from(list(self.m.read(int(a), int(n))))
         # The game's own code and data sit in a read-only image in the running game: only
         # the writeCode* calls may touch them, and a plain write there is an access

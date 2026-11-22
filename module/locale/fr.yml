@@ -2,7 +2,7 @@ bugfixes: Corrections
 balance_changes: Modifications de l'équilibrage
 enemy_gates_closed: Considérer les portes ennemies comme fermées
 enemy_gates_closed_tooltip: |-
-  Les troupes contournent les portes ennemies, même ouvertes. Les portes amies et capturées laissent toujours passer. Incompatible avec le raccourci d'escalade des assassins de Smarter Pathing ; la même restriction s'applique si l'une des règles d'escaliers est activée.
+  Les troupes contournent les portes ennemies, même ouvertes. Les portes amies et capturées laissent toujours passer. Fonctionne avec le raccourci d'escalade des assassins de Smarter Pathing.
 centred: Mesurer la distance de fermeture depuis le centre
 reachable_only: Ignorer les ennemis ne pouvant pas atteindre la porte
 reachable_only_tooltip: Les ennemis derrière des murs, des douves ou des falaises ne ferment pas la porte si leur zone est isolée.

@@ -2,7 +2,7 @@ bugfixes: Fehlerkorrekturen
 balance_changes: Balance-Änderungen
 enemy_gates_closed: Feindliche Tore als geschlossen behandeln
 enemy_gates_closed_tooltip: |-
-  Truppen planen ihre Route um feindliche Tore herum, auch um offene. Eigene, verbündete und eroberte Tore lassen weiterhin passieren. Nicht kombinierbar mit der Kletterabkürzung für Assassinen in Smarter Pathing; dieselbe Einschränkung gilt, wenn eine der beiden Treppenregeln aktiv ist.
+  Truppen planen ihre Route um feindliche Tore herum, auch um offene. Eigene, verbündete und eroberte Tore lassen weiterhin passieren. Funktioniert zusammen mit der Kletterabkürzung für Assassinen in Smarter Pathing.
 centred: Schließabstand ab Tormitte messen
 reachable_only: Unerreichbare Feinde ignorieren
 reachable_only_tooltip: Feinde hinter Mauern, Burggräben oder Klippen schließen das Tor nicht, wenn ihr Gebiet nicht verbunden ist.

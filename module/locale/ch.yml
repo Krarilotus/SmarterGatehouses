@@ -2,7 +2,7 @@ bugfixes: 错误修复
 balance_changes: 平衡性改动
 enemy_gates_closed: 将敌方城门视为关闭
 enemy_gates_closed_tooltip: |-
-  部队会绕开敌方城门（包括敞开的城门）；友方及已占领的城门仍可通行。不能与 Smarter Pathing 中的刺客捷径同时启用；启用任意阶梯规则时亦同。
+  部队会绕开敌方城门（包括敞开的城门）；友方及已占领的城门仍可通行。可与 Smarter Pathing 中的刺客捷径协同工作。
 centred: 从城门中心测量关门距离
 reachable_only: 忽略无法抵达城门的敌人
 reachable_only_tooltip: 若区域互不相通，城墙、护城河或悬崖另一侧的敌人不会触发关门。

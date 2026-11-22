@@ -2,8 +2,7 @@ bugfixes: Bugfixes
 balance_changes: Balance Changes
 enemy_gates_closed: Treat enemy gates as closed
 enemy_gates_closed_tooltip: Troops plan around enemy gates, including open ones. Friendly and captured
-  gates still allow passage. This cannot be used with the assassin shortcut in Smarter Pathing. The same
-  restriction applies when either stairs rule is on.
+  gates still allow passage. Works together with the assassin shortcut of Smarter Pathing.
 centred: Measure closing distance from the centre
 reachable_only: Ignore enemies who cannot reach the gate
 reachable_only_tooltip: Enemies behind walls, moats or cliffs do not close the gate when their area is

@@ -2,7 +2,7 @@ bugfixes: Correcciones
 balance_changes: Cambios de equilibrio
 enemy_gates_closed: Tratar las puertas enemigas como cerradas
 enemy_gates_closed_tooltip: |-
-  Las tropas planifican su ruta evitando puertas enemigas, incluso si están abiertas. Las puertas aliadas y capturadas siguen permitiendo el paso. No puede usarse junto con el atajo de asesinos de Smarter Pathing; la misma restricción se aplica si está activa cualquiera de las reglas de escaleras.
+  Las tropas planifican su ruta evitando puertas enemigas, incluso si están abiertas. Las puertas aliadas y capturadas siguen permitiendo el paso. Funciona junto con el atajo de asesinos de Smarter Pathing.
 centred: Medir la distancia de cierre desde el centro
 reachable_only: Ignorar enemigos que no puedan llegar a la puerta
 reachable_only_tooltip: Los enemigos tras muros, fosos o acantilados no cierran la puerta cuando su zona está desconectada.

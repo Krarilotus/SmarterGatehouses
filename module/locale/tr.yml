@@ -2,7 +2,7 @@ bugfixes: Hata düzeltmeleri
 balance_changes: Denge değişiklikleri
 enemy_gates_closed: Düşman kapılarını kapalı say
 enemy_gates_closed_tooltip: |-
-  Birlikler açık olanlar dâhil düşman kapılarının etrafından dolaşır. Dost ve ele geçirilmiş kapılar geçişe izin vermeye devam eder. Smarter Pathing'deki suikastçı kestirmesiyle birlikte kullanılamaz; merdiven kurallarından biri açıkken de aynı kısıtlama geçerlidir.
+  Birlikler açık olanlar dâhil düşman kapılarının etrafından dolaşır. Dost ve ele geçirilmiş kapılar geçişe izin vermeye devam eder. Smarter Pathing'deki suikastçı kestirmesiyle birlikte çalışır.
 centred: Kapanma mesafesini merkezden ölç
 reachable_only: Kapıya ulaşamayan düşmanları yok say
 reachable_only_tooltip: Bölgeleri bağlantısızsa sur, hendek veya uçurum arkasındaki düşmanlar kapıyı kapatmaz.

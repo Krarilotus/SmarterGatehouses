@@ -2,7 +2,7 @@ bugfixes: Hibajavítások
 balance_changes: Egyensúly-módosítások
 enemy_gates_closed: Ellenséges kapuk zártnak tekintése
 enemy_gates_closed_tooltip: |-
-  A csapatok elkerülik az ellenséges kapukat, a nyitottakat is. A barátságos és elfoglalt kapukon továbbra is átkelhetnek. Nem használható együtt a Smarter Pathing orgyilkos-rövidítésével; ugyanez a korlátozás érvényes, ha bármelyik lépcsőszabály be van kapcsolva.
+  A csapatok elkerülik az ellenséges kapukat, a nyitottakat is. A barátságos és elfoglalt kapukon továbbra is átkelhetnek. Együttműködik a Smarter Pathing orgyilkos-rövidítésével.
 centred: Zárási távolság mérése a középponttól
 reachable_only: A kaput el nem érő ellenségek figyelmen kívül hagyása
 reachable_only_tooltip: A falak, várárkok vagy sziklák mögötti ellenségek nem zárják be a kaput, ha a területük nincs összeköttetésben.

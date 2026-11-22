@@ -117,7 +117,9 @@ class Host:
         # The route-search module (a dependency), from ROUTE_SEARCH_MODULE, enabled first.
         self.routes = None
         if ROUTE_SEARCH:
-            self.routes = lua.eval(b'dofile')((ROUTE_SEARCH + r'\init.lua').encode('mbcs'))
+            loaded = lua.eval(b'dofile')((ROUTE_SEARCH + r'\init.lua').encode('mbcs'))
+            # init.lua also returns its proxy options (framework 3.0.7); the module is first.
+            self.routes = loaded[0] if isinstance(loaded, tuple) else loaded
             self.routes[b'enable'](self.routes, lua.table())
             registry[b'route-search'] = self.routes
         self.mod = lua.eval(b'dofile')((MODULE + r'\init.lua').encode('mbcs'))

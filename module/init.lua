@@ -118,13 +118,13 @@ local TRIBE_GIVE_UP_JUMP = 8
 local TRIBE_HOOK = 14
 local TRIBE_HOOK_SIZE = 8
 
--- Which AI character each player runs; 0 is a human player.
--- The game's tick counter: mov edx, [ticks] in updateUnits.
-local AOB_TICKS = "8B 87 50 0A 00 00 8B 8F 98 09 00 00 8B 15"
-local TICKS_OPERAND = 0x0E
+-- The game's tick counter: mov ecx, [edi+0x998] / mov edx, [ticks] in updateUnits. The mask
+-- load before it is patched by other modules.
+local AOB_TICKS = "8B 8F 98 09 00 00 8B 15 I(? ? ? ?)"
 -- Blocked trips remembered (a power of two): KEY1, KEY2, tick.
 local BLOCKED_ENTRIES = 32
 
+-- Which AI character each player runs; 0 is a human player.
 local AOB_PLAYER_AIC = "69 C0 F4 39 00 00 8B 88 ? ? ? ? 69 C9 A4 02 00 00"
 local PLAYER_AIC_OPERAND = 8
 
@@ -580,21 +580,18 @@ return {
 
         -- Trips the whole retry chain found nothing for, so the rest of an army skips it.
         local rememberOn = setting(config, "pathing", "remember_blocked")
-        local ticksSite = rememberOn and scanOptional(AOB_TICKS, "the game's tick counter") or nil
+        local tickCounter
+        if rememberOn then
+          local found, _, counter = pcall(utils.AOBExtract, AOB_TICKS)
+          tickCounter = found and counter or nil
+          if tickCounter == nil then
+            log(WARNING, "smarter-gatehouses: could not find the game's tick counter; blocked trips "
+              .. "are not remembered.")
+          end
+        end
         local blocked = core.allocate(BLOCKED_ENTRIES * 12 + 32, true)
         local remember = blocked + BLOCKED_ENTRIES * 12
-        if ticksSite ~= nil then
-          local function resetBlockedTrips()
-            core.setMemory(blocked, 0, BLOCKED_ENTRIES * 12)
-            core.setMemory(remember + 8, 0, 20)
-          end
-          modules["map-extensions"]:registerSection("smarter-gatehouses", {
-            initialize = resetBlockedTrips,
-            deserialize = resetBlockedTrips,
-            serialize = function() end,
-          })
-        end
-        writeInteger(remember, ticksSite ~= nil and 1 or 0)
+        writeInteger(remember, tickCounter ~= nil and 1 or 0)
         local ticks = config.pathing and tonumber(config.pathing.remember_ticks)
           or DEFAULTS.pathing.remember_ticks
         writeInteger(remember + 4, math.max(1, math.min(10000, math.floor(ticks))))
@@ -608,7 +605,7 @@ return {
           SKIPPED = remember + 24,
           BLOCKED = blocked,
           BLOCKED_ENTRIES = BLOCKED_ENTRIES,
-          TICKS = ticksSite ~= nil and readAddress(ticksSite + TICKS_OPERAND) or remember + 28,
+          TICKS = tickCounter or remember + 28,
           UNIT_OWNER = UNIT_OWNER,
           ROW_TABLE = rowTable,
           AREA_MAP = areaMap,
@@ -654,7 +651,22 @@ return {
           GATE_OR_TOWER = gateOrTower,
           TILE_FLAGS = tileFlags,
         })
-        routes:enablePolicy(ROUTE_POLICY.id, pathSearch)
+        local active, problem = pcall(routes.enablePolicy, routes, ROUTE_POLICY.id, pathSearch)
+        if not active then
+          log(WARNING, "smarter-gatehouses: the route search is unavailable (" .. tostring(problem)
+            .. "); the gate route rules are off.")
+          enemyClosedOn, stairsOn, stairsAiOn = false, false, false
+        elseif tickCounter ~= nil then
+          local function resetBlockedTrips()
+            core.setMemory(blocked, 0, BLOCKED_ENTRIES * 12)
+            core.setMemory(remember + 8, 0, 20)
+          end
+          modules["map-extensions"]:registerSection("smarter-gatehouses", {
+            initialize = resetBlockedTrips,
+            deserialize = resetBlockedTrips,
+            serialize = function() end,
+          })
+        end
 
         local cursorSite = (stairsOn or stairsAiOn)
           and scanOptional(AOB_MOVE_CURSOR, "the troops' move cursor") or nil

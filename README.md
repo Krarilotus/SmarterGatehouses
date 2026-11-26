@@ -46,6 +46,7 @@ What the module does, in plain English, is in `module/locale/description-en.md`.
 
 The bench needs Python with `lupa`, `capstone`, `pefile` and `keystone-engine`, and a 32-bit
 PowerShell for fasm.dll; it reads the executables from the game folder named in `shc.py`.
+Set `UCP_UTILS_LUA` to the framework 3.0.8 source file `content/ucp/code/utils.lua`.
 Environment overrides: `SHC_GAME_DIR` (the folder with both executables), `FASM_EXE` (use
 fasm.exe instead of fasm.dll, with `FASM_EXE_KB` kilobytes, default 57), `BENCH_FASM_CACHE`,
 `ROUTE_SEARCH_MODULE` (the route-search module folder, needed for the route rules) and

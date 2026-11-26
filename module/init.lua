@@ -120,7 +120,7 @@ local TRIBE_HOOK_SIZE = 8
 
 -- The game's tick counter: mov ecx, [edi+0x998] / mov edx, [ticks] in updateUnits. The mask
 -- load before it is patched by other modules.
-local AOB_TICKS = "8B 8F 98 09 00 00 8B 15 I(? ? ? ?)"
+local AOB_TICKS = "8B 8F 98 09 00 00 8B 15"
 -- Blocked trips remembered (a power of two): KEY1, KEY2, tick.
 local BLOCKED_ENTRIES = 32
 
@@ -376,7 +376,7 @@ return {
       end
     end
 
-    local routeSite, routes, route
+    local routeSite, routes, route, tickCounter
     if enemyClosedOn or stairsOn or stairsAiOn then
       routeSite = scanOptional(AOB_PATH_CALL, "the call that searches a unit's route")
       if routeSite and another(AOB_PATH_CALL, routeSite) then
@@ -385,6 +385,16 @@ return {
         routeSite = nil
       end
       if routeSite then
+        if setting(config, "pathing", "remember_blocked") then
+          local found, site, counter = pcall(utils.AOBExtract, AOB_TICKS .. " I(? ? ? ?)")
+          if found and not another(AOB_TICKS .. " ? ? ? ?", site) then
+            tickCounter = counter
+          end
+          if tickCounter == nil then
+            log(WARNING, "smarter-gatehouses: could not resolve the game's tick counter; blocked trips "
+              .. "are not remembered.")
+          end
+        end
         routes = modules["route-search"]
         if not routes or (routes.version or 0) < 1 then
           error("smarter-gatehouses: the gate route rules need the route-search module (version 1)")
@@ -579,16 +589,6 @@ return {
         local routeOk = core.allocateAssembly(templates.route_ok, routeValues)
 
         -- Trips the whole retry chain found nothing for, so the rest of an army skips it.
-        local rememberOn = setting(config, "pathing", "remember_blocked")
-        local tickCounter
-        if rememberOn then
-          local found, _, counter = pcall(utils.AOBExtract, AOB_TICKS)
-          tickCounter = found and counter or nil
-          if tickCounter == nil then
-            log(WARNING, "smarter-gatehouses: could not find the game's tick counter; blocked trips "
-              .. "are not remembered.")
-          end
-        end
         local blocked = core.allocate(BLOCKED_ENTRIES * 12 + 32, true)
         local remember = blocked + BLOCKED_ENTRIES * 12
         writeInteger(remember, tickCounter ~= nil and 1 or 0)

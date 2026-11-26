@@ -144,7 +144,7 @@ class World:
 
 
 def cfg(enemy=True, centred=True, reach=True, stairs=False):
-    return {'pathing': {'enemy_gates_closed': enemy},
+    return {'pathing': {'enemy_gates_closed': enemy, 'remember_blocked': True},
             'detection': {'centred': centred, 'reachable_only': reach},
             'walls': {'stairs_needed': stairs}}
 

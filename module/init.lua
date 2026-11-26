@@ -389,7 +389,15 @@ return {
         if not routes or (routes.version or 0) < 1 then
           error("smarter-gatehouses: the gate route rules need the route-search module (version 1)")
         end
-        route = routes:addPolicy(ROUTE_POLICY)
+        local ok, policy = pcall(routes.addPolicy, routes, ROUTE_POLICY)
+        if ok then
+          route = policy
+        else
+          log(WARNING, "smarter-gatehouses: the route search is unavailable (" .. tostring(policy)
+            .. "); the gate route rules are off.")
+          routeSite = nil
+          enemyClosedOn, stairsOn, stairsAiOn = false, false, false
+        end
       end
     end
 

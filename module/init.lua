@@ -359,19 +359,23 @@ return {
     local routeSite, routes, route
     if enemyClosedOn or stairsOn or stairsAiOn then
       routeSite = scanOptional(AOB_PATH_CALL, "the call that searches a unit's route")
-      if not routeSite then return end
-      local nextCall = core.scanForAOB(AOB_PATH_CALL, routeSite + 1)
-      local nextSearch = core.scanForAOB(AOB_DO_PATHFINDING, search + 1)
-      if (nextCall and nextCall ~= 0) or (nextSearch and nextSearch ~= 0) then
-        error("smarter-gatehouses: the route call or original search signature is ambiguous")
+      -- Another match before or after the one found means the binding is not unique.
+      local function another(pattern, at)
+        local first, nextAt = core.scanForAOB(pattern), core.scanForAOB(pattern, at + 1)
+        return first ~= at or (nextAt ~= nil and nextAt ~= 0)
       end
-      -- Registered before anything is changed: if route-search cannot take the route search,
-      -- it says why and the game stays as it is.
-      routes = modules["route-search"]
-      if not routes or (routes.version or 0) < 1 then
-        error("smarter-gatehouses: the gate route rules need the route-search module (version 1)")
+      if routeSite and (another(AOB_PATH_CALL, routeSite) or another(AOB_DO_PATHFINDING, search)) then
+        log(WARNING, "smarter-gatehouses: the route call or the game's route search matches more "
+          .. "than once; the gate route rules are off.")
+        routeSite = nil
       end
-      route = routes:addPolicy(ROUTE_POLICY)
+      if routeSite then
+        routes = modules["route-search"]
+        if not routes or (routes.version or 0) < 1 then
+          error("smarter-gatehouses: the gate route rules need the route-search module (version 1)")
+        end
+        route = routes:addPolicy(ROUTE_POLICY)
+      end
     end
 
     local buildings = (readAddress(linkGates + LINK_BUILDING_X_OPERAND) - BUILDING_X)

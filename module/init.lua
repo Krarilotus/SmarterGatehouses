@@ -350,23 +350,38 @@ return {
         "the gatehouse link function") then
       linkGates = nil
     end
-    local search = scanOptional(AOB_DO_PATHFINDING, "the route search")
-    if linkGates == nil or search == nil then
+    if linkGates == nil then
       log(WARNING, "smarter-gatehouses: nothing was changed.")
       return
+    end
+
+    -- Another match before or after the one found means the binding is not unique.
+    local function another(pattern, at)
+      local first, nextAt = core.scanForAOB(pattern), core.scanForAOB(pattern, at + 1)
+      return first ~= at or (nextAt ~= nil and nextAt ~= 0)
+    end
+
+    -- The route search's row table and area map: read by the route rules and by the
+    -- reachable-only check, which stay off without a unique match.
+    local search
+    if enemyClosedOn or stairsOn or stairsAiOn or reachableOn then
+      search = scanOptional(AOB_DO_PATHFINDING, "the route search")
+      if search and another(AOB_DO_PATHFINDING, search) then
+        log(WARNING, "smarter-gatehouses: the game's route search matches more than once; the "
+          .. "gate route rules and the reachable-only check are off.")
+        search = nil
+      end
+      if search == nil then
+        enemyClosedOn, stairsOn, stairsAiOn, reachableOn = false, false, false, false
+      end
     end
 
     local routeSite, routes, route
     if enemyClosedOn or stairsOn or stairsAiOn then
       routeSite = scanOptional(AOB_PATH_CALL, "the call that searches a unit's route")
-      -- Another match before or after the one found means the binding is not unique.
-      local function another(pattern, at)
-        local first, nextAt = core.scanForAOB(pattern), core.scanForAOB(pattern, at + 1)
-        return first ~= at or (nextAt ~= nil and nextAt ~= 0)
-      end
-      if routeSite and (another(AOB_PATH_CALL, routeSite) or another(AOB_DO_PATHFINDING, search)) then
-        log(WARNING, "smarter-gatehouses: the route call or the game's route search matches more "
-          .. "than once; the gate route rules are off.")
+      if routeSite and another(AOB_PATH_CALL, routeSite) then
+        log(WARNING, "smarter-gatehouses: the route call matches more than once; the gate route "
+          .. "rules are off.")
         routeSite = nil
       end
       if routeSite then
@@ -381,8 +396,8 @@ return {
     local buildings = (readAddress(linkGates + LINK_BUILDING_X_OPERAND) - BUILDING_X)
       & 0xFFFFFFFF
     local linkage = readAddress(linkGates + LINK_LAYER_OPERAND)
-    local rowTable = readAddress(search + SEARCH_ROW_TABLE_OPERAND)
-    local areaMap = readAddress(search + SEARCH_AREA_MAP_OPERAND)
+    local rowTable = search and readAddress(search + SEARCH_ROW_TABLE_OPERAND) or 0
+    local areaMap = search and readAddress(search + SEARCH_AREA_MAP_OPERAND) or 0
 
     local control = core.allocate(C.SIZE, true)
     writeInteger(control + C.CENTRE_ENABLED, centredOn and 1 or 0)

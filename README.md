@@ -50,3 +50,10 @@ Environment overrides: `SHC_GAME_DIR` (the folder with both executables), `FASM_
 fasm.exe instead of fasm.dll, with `FASM_EXE_KB` kilobytes, default 57), `BENCH_FASM_CACHE`,
 `ROUTE_SEARCH_MODULE` (the route-search module folder, needed for the route rules) and
 `SMARTER_PATHING_MODULE` (Smarter Pathing's `module/` folder, for section 11).
+
+## Vanilla and Recommended
+
+Every option of the module is off by default, so the module alone plays like the original
+game. Two plugins in this repository form the Gatehouse Fixes family in the launcher:
+`smarter-gatehouses-recommended` (offered first) switches on the recommended settings, `smarter-gatehouses-vanilla`
+keeps everything off. Plugins that build on the module set the options they need themselves.

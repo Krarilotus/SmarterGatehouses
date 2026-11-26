@@ -23,9 +23,9 @@
 local templates = require("templates")
 
 local DEFAULTS = {
-  pathing = { enemy_gates_closed = true, remember_blocked = true, remember_ticks = 100 },
-  detection = { centred = true, reachable_only = true },
-  walls = { stairs_needed = false, stairs_needed_ai = false, assassins_climb = true },
+  pathing = { enemy_gates_closed = false, remember_blocked = false, remember_ticks = 100 },
+  detection = { centred = false, reachable_only = false },
+  walls = { stairs_needed = false, stairs_needed_ai = false, assassins_climb = false },
   damage = { large_gatehouse = 100 },
 }
 

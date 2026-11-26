@@ -1,0 +1,25 @@
+meta:
+  version: 1.0.0
+config-sparse:
+  modules:
+    smarter-gatehouses:
+      config:
+        pathing:
+          enemy_gates_closed:
+            contents:
+              suggested-value: true
+          remember_blocked:
+            contents:
+              suggested-value: true
+        detection:
+          centred:
+            contents:
+              suggested-value: true
+          reachable_only:
+            contents:
+              suggested-value: true
+        walls:
+          assassins_climb:
+            contents:
+              suggested-value: true
+  plugins: {}

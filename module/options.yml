@@ -6,7 +6,7 @@ options:
   display: UCP2Switch
   contents:
     type: boolean
-    value: true
+    value: false
   category:
   - '{{bugfixes}}'
   header: '{{enemy_gates_closed}}'
@@ -16,7 +16,7 @@ options:
   display: UCP2Switch
   contents:
     type: boolean
-    value: true
+    value: false
   category:
   - '{{bugfixes}}'
   header: '{{remember_blocked}}'
@@ -44,7 +44,7 @@ options:
   display: UCP2Switch
   contents:
     type: boolean
-    value: true
+    value: false
   header: '{{centred}}'
   text: '{{centred_tooltip}}'
   category:
@@ -54,7 +54,7 @@ options:
   display: UCP2Switch
   contents:
     type: boolean
-    value: true
+    value: false
   header: '{{reachable_only}}'
   text: '{{reachable_only_tooltip}}'
   category:
@@ -84,7 +84,7 @@ options:
   display: UCP2Switch
   contents:
     type: boolean
-    value: true
+    value: false
   header: '{{assassins_climb}}'
   text: '{{assassins_climb_tooltip}}'
   category:

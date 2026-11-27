@@ -18,7 +18,6 @@ remember_blocked: Blockierte Wege merken (weniger Ruckler)
 remember_blocked_tooltip: |-
   Findet die Treppenregel nach Prüfung aller Torhäuser keinen Weg für eine Einheit, wird derselbe Weg für nachfolgende Einheiten kurz übersprungen: Sie nutzen sofort die spielinterne Wegsuche. Eine gesammelt losgeschickte Armee lässt das Spiel nicht mehr ruckeln.
 remember_ticks: Blockierten Weg merken für (Spielticks)
-remember_ticks_tooltip: 100 Ticks entsprechen bei normaler Geschwindigkeit etwa zwei Sekunden.
 centred_tooltip: Misst ab der Mitte des Torhauses, sodass Feinde das Schließen von jeder Seite in gleichem Abstand auslösen.
 tags.bugfixes: Fehlerkorrekturen
 tags.balance: Balance

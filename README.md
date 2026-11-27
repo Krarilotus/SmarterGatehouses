@@ -22,6 +22,9 @@ stop working as staircases onto the walls.
 
 What the module does, in plain English, is in `module/locale/description-en.md`.
 
+Presets can set `smarter-gatehouses.pathing.remember_ticks` to change how long
+blocked gate routes are remembered. The default is 100 game ticks.
+
 ## What is in here
 
 | Folder | |

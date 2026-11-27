@@ -1,5 +1,5 @@
 bugfixes: 错误修复
-balance_changes: 平衡性改动
+balance_changes: 平衡调整
 enemy_gates_closed: 将敌方城门视为关闭
 enemy_gates_closed_tooltip: |-
   部队会绕开敌方城门（包括敞开的城门）；友方及已占领的城门仍可通行。
@@ -18,7 +18,6 @@ remember_blocked: 记住受阻路线（减少卡顿）
 remember_blocked_tooltip: |-
   当阶梯规则尝试所有城门后仍无法为单位找到路线时，后续单位会在短时间内跳过同一路线，直接使用游戏自带寻路。同时调动整支军队时不再引起卡顿。
 remember_ticks: 记住受阻路线的时长（游戏刻）
-remember_ticks_tooltip: 正常速度下 100 刻约为两秒。
 centred_tooltip: 从城门楼中心测距，使敌人从任一方向接近都在相同距离触发关门。
 tags.bugfixes: 错误修复
 tags.balance: 平衡

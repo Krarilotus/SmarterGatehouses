@@ -1,4 +1,4 @@
-bugfixes: Correcciones
+bugfixes: Correcciones de errores
 balance_changes: Cambios de equilibrio
 enemy_gates_closed: Tratar las puertas enemigas como cerradas
 enemy_gates_closed_tooltip: |-
@@ -18,7 +18,6 @@ remember_blocked: Recordar rutas bloqueadas (menos tirones)
 remember_blocked_tooltip: |-
   Cuando la regla de escaleras no encuentra camino para una unidad tras probar todas las puertas, la misma ruta se omite brevemente para las unidades siguientes: pasan directo a la búsqueda propia del juego. Un ejército enviado de golpe ya no provoca tirones.
 remember_ticks: Recordar una ruta bloqueada durante (ticks de juego)
-remember_ticks_tooltip: 100 ticks son unos dos segundos a velocidad normal.
 centred_tooltip: Mide desde el centro de la puerta para que los enemigos activen el cierre a la misma distancia desde cualquier lado.
 tags.bugfixes: Correcciones
 tags.balance: Equilibrio

@@ -1,4 +1,4 @@
-bugfixes: Corrections
+bugfixes: Corrections de bugs
 balance_changes: Modifications de l'équilibrage
 enemy_gates_closed: Considérer les portes ennemies comme fermées
 enemy_gates_closed_tooltip: |-
@@ -18,7 +18,6 @@ remember_blocked: Mémoriser les trajets bloqués (moins de saccades)
 remember_blocked_tooltip: |-
   Lorsque la règle des escaliers ne trouve aucun passage pour une unité après avoir essayé toutes les portes, le même trajet est brièvement ignoré pour les unités suivantes : elles passent directement à la recherche de chemin du jeu. Une armée envoyée d'un coup ne fait plus saccader le jeu.
 remember_ticks: Mémoriser un trajet bloqué pendant (ticks de jeu)
-remember_ticks_tooltip: 100 ticks correspondent à environ deux secondes à vitesse normale.
 centred_tooltip: Mesure depuis le centre de la porte afin que les ennemis déclenchent la fermeture à la même distance de chaque côté.
 tags.bugfixes: Corrections
 tags.balance: Équilibrage

@@ -1,5 +1,5 @@
 bugfixes: Hibajavítások
-balance_changes: Egyensúly-módosítások
+balance_changes: Egyensúlymódosítások
 enemy_gates_closed: Ellenséges kapuk zártnak tekintése
 enemy_gates_closed_tooltip: |-
   A csapatok elkerülik az ellenséges kapukat, a nyitottakat is. A barátságos és elfoglalt kapukon továbbra is átkelhetnek.
@@ -18,7 +18,6 @@ remember_blocked: Elzárt utak megjegyzése (kevesebb akadás)
 remember_blocked_tooltip: |-
   Ha a lépcsőszabály minden kapuház kipróbálása után sem talál utat egy egységnek, ugyanazt az utat rövid ideig átugorja a következő egységeknél: azok rögtön a játék saját útkeresését használják. Az egyszerre elindított sereg többé nem akasztja meg a játékot.
 remember_ticks: Elzárt út megjegyzése ennyi ideig (játékütem)
-remember_ticks_tooltip: 100 ütem normál sebességen nagyjából két másodperc.
 centred_tooltip: A kapuház közepétől mér, így az ellenségek minden oldalról azonos távolságból váltják ki a bezáródást.
 tags.bugfixes: Hibajavítások
 tags.balance: Egyensúly

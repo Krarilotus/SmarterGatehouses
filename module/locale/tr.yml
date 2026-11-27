@@ -1,23 +1,22 @@
 bugfixes: Hata düzeltmeleri
 balance_changes: Denge değişiklikleri
-enemy_gates_closed: Düşman kapılarını kapalı say
-enemy_gates_closed_tooltip: |-
-  Birlikler açık olanlar dâhil düşman kapılarının etrafından dolaşır. Dost ve ele geçirilmiş kapılar geçişe izin vermeye devam eder.
-centred: Kapanma mesafesini merkezden ölç
-reachable_only: Kapıya ulaşamayan düşmanları yok say
-reachable_only_tooltip: Bölgeleri bağlantısızsa sur, hendek veya uçurum arkasındaki düşmanlar kapıyı kapatmaz.
+enemy_gates_closed: Rotalar düşman kapılarını kapalı sayar
+enemy_gates_closed_tooltip: Birlikler açık olsalar bile düşman kapılarının etrafından rota çizer.
+centred: Kapı kapanma mesafesini merkezden ölç
+reachable_only: Yalnızca kapıya ulaşabilen düşmanlar için kapat
+reachable_only_tooltip: Ulaşılamayan arazideki düşmanlar kapının kapanmasını tetiklemez.
 stairs_needed: Oyuncu birlikleri merdiven kullanmalı
-stairs_needed_tooltip: Oyuncu birlikleri surlara ve kapı binası çatılarına çıkmak için merdivene ihtiyaç duyar. Deneysel; varsayılan olarak kapalı.
+stairs_needed_tooltip: Oyuncu kontrolündeki birlikler kapı binalarının üstüne çıkmak için merdiven kullanır.
 stairs_needed_ai: Yapay zekâ birlikleri de merdiven kullanmalı
-stairs_needed_ai_tooltip: Aynı kuralı yapay zekâ oyuncularına uygular. Merdivensiz kalelerin surları boş kalabilir.
-assassins_climb: Suikastçılar surlara tırmanmaya devam eder
-assassins_climb_tooltip: Suikastçılar surlara kancalarıyla tırmandığından merdiven kuralı onları etkilemez.
-large_gatehouse_damage: Büyük kapı binasında menzilli hasar (%)
-large_gatehouse_damage_tooltip: Büyük kapı binasının üstünde duran birlikler ok, arbalet oku ve sapan taşlarından gelen hasarın bu kadarını alır. Küçük kapı binasında daha uzun dayanırlar; eşitlemek için bunu düşürün. 100 = değişmez.
-remember_blocked: Engelli yolları hatırla (daha az takılma)
-remember_blocked_tooltip: |-
-  Merdiven kuralı tüm kapı binalarını denedikten sonra bir birim için yol bulamazsa, aynı yol sonraki birimler için kısa süre atlanır: doğrudan oyunun kendi yol bulmasını kullanırlar. Aynı anda gönderilen bir ordu artık oyunda takılmaya yol açmaz.
+stairs_needed_ai_tooltip: Yapay zekâ birlikleri kapı binalarının üstüne çıkmak için merdiven kullanır.
+assassins_climb: Suikastçıların yine de tırmanmasına izin ver
+assassins_climb_tooltip: Merdiven gerektiğinde bile suikastçılar kapı binalarına tırmanabilir.
+large_gatehouse_damage: Büyük kapı binalarındaki birliklere menzilli hasar (%)
+large_gatehouse_damage_tooltip: "%100 normal menzilli hasar demektir."
+remember_blocked: Yakın zamanda tıkanmış kapı rotalarını hatırla
+remember_blocked_tooltip: Birlikler, yakın zamanda düşman kapısınca tıkanmış bir rotayı yeniden denemeden önce bekler.
 remember_ticks: Engelli yolu hatırlama süresi (oyun tıkı)
-centred_tooltip: Düşman hangi taraftan gelirse gelsin kapanmayı aynı mesafeden tetiklemesi için kapı binasının merkezinden ölçer.
+centred_tooltip: Kapı binaları bir düşmanın yakınlığını kapının ortasından ölçer.
 tags.bugfixes: Hata düzeltmeleri
 tags.balance: Denge
+gatehouse_access: Kapı binasına çıkmak için merdiven gerektir

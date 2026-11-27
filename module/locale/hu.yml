@@ -1,23 +1,22 @@
 bugfixes: Hibajavítások
 balance_changes: Egyensúlymódosítások
-enemy_gates_closed: Ellenséges kapuk zártnak tekintése
-enemy_gates_closed_tooltip: |-
-  A csapatok elkerülik az ellenséges kapukat, a nyitottakat is. A barátságos és elfoglalt kapukon továbbra is átkelhetnek.
-centred: Zárási távolság mérése a középponttól
-reachable_only: A kaput el nem érő ellenségek figyelmen kívül hagyása
-reachable_only_tooltip: A falak, várárkok vagy sziklák mögötti ellenségek nem zárják be a kaput, ha a területük nincs összeköttetésben.
+enemy_gates_closed: Az útvonalak zártnak veszik az ellenséges kapukat
+enemy_gates_closed_tooltip: A csapatok akkor is kikerülik az ellenséges kapukat, ha azok nyitva vannak.
+centred: Kapuzárási távolság mérése a középponttól
+reachable_only: Zárás csak a kaput elérő ellenségeknél
+reachable_only_tooltip: A megközelíthetetlen terepen lévő ellenségek nem zárják be a kaput.
 stairs_needed: Az emberi csapatoknak lépcső kell
-stairs_needed_tooltip: Az emberi csapatoknak lépcsőre van szükségük a falak és kapuházak tetejének eléréséhez. Kísérleti; alapértelmezés szerint kikapcsolva.
+stairs_needed_tooltip: A játékos csapatai lépcsőn jutnak fel a kapuházak tetejére.
 stairs_needed_ai: Az MI csapatainak is lépcső kell
-stairs_needed_ai_tooltip: Ugyanez a szabály az MI-játékosokra is érvényes. A lépcső nélküli várak falai üresen maradhatnak.
-assassins_climb: Az orgyilkosok továbbra is másznak falra
-assassins_climb_tooltip: Az orgyilkosok a kampóikkal másznak fel a falakra, így rájuk nem vonatkozik a lépcsőszabály.
-large_gatehouse_damage: Távolsági sebzés nagy kapuházon (%)
-large_gatehouse_damage_tooltip: A nagy kapuház tetején álló csapatok a nyilak, számszeríj-nyílvesszők és parittyakövek sebzésének ennyi részét kapják. A kis kapuházon tovább bírják; csökkentsd a kiegyenlítéshez. 100 = változatlan.
-remember_blocked: Elzárt utak megjegyzése (kevesebb akadás)
-remember_blocked_tooltip: |-
-  Ha a lépcsőszabály minden kapuház kipróbálása után sem talál utat egy egységnek, ugyanazt az utat rövid ideig átugorja a következő egységeknél: azok rögtön a játék saját útkeresését használják. Az egyszerre elindított sereg többé nem akasztja meg a játékot.
+stairs_needed_ai_tooltip: Az MI-csapatok lépcsőn jutnak fel a kapuházak tetejére.
+assassins_climb: Az orgyilkosok továbbra is mászhassanak
+assassins_climb_tooltip: Az orgyilkosok lépcsőkötelezettség mellett is felmászhatnak a kapuházakra.
+large_gatehouse_damage: Távolsági sebzés a nagy kapuházakon álló csapatokra (%)
+large_gatehouse_damage_tooltip: A 100% a normál távolsági sebzésnek felel meg.
+remember_blocked: Nemrég blokkolt kapuútvonalak megjegyzése
+remember_blocked_tooltip: A csapatok várnak, mielőtt újra megpróbálnak egy ellenséges kapu által nemrég elzárt útvonalat.
 remember_ticks: Elzárt út megjegyzése ennyi ideig (játékütem)
-centred_tooltip: A kapuház közepétől mér, így az ellenségek minden oldalról azonos távolságból váltják ki a bezáródást.
+centred_tooltip: A kapuházak a kapu közepétől mérik az ellenség közelségét.
 tags.bugfixes: Hibajavítások
 tags.balance: Egyensúly
+gatehouse_access: Lépcső megkövetelése a kapuházra jutáshoz

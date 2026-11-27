@@ -1,23 +1,22 @@
 bugfixes: Fehlerkorrekturen
 balance_changes: Balance-Änderungen
-enemy_gates_closed: Feindliche Tore als geschlossen behandeln
-enemy_gates_closed_tooltip: |-
-  Truppen planen ihre Route um feindliche Tore herum, auch um offene. Eigene, verbündete und eroberte Tore lassen weiterhin passieren.
-centred: Schließabstand ab Tormitte messen
-reachable_only: Unerreichbare Feinde ignorieren
-reachable_only_tooltip: Feinde hinter Mauern, Burggräben oder Klippen schließen das Tor nicht, wenn ihr Gebiet nicht verbunden ist.
+enemy_gates_closed: Routen behandeln feindliche Tore als geschlossen
+enemy_gates_closed_tooltip: Truppen planen Routen um feindliche Tore herum, selbst wenn diese offen stehen.
+centred: Torschließ-Abstand ab der Mitte messen
+reachable_only: Nur für Gegner schließen, die das Tor erreichen können
+reachable_only_tooltip: Gegner auf unzugänglichem Gelände lösen das Schließen nicht aus.
 stairs_needed: Spielertruppen brauchen Treppen
-stairs_needed_tooltip: Menschliche Truppen brauchen Treppen, um Mauern und Torhausdächer zu erreichen. Experimentell; standardmäßig deaktiviert.
+stairs_needed_tooltip: Menschlich gesteuerte Truppen brauchen eine Treppe, um auf Torhäuser zu gelangen.
 stairs_needed_ai: KI-Truppen brauchen Treppen
-stairs_needed_ai_tooltip: Wendet dieselbe Regel auf KI-Spieler an. Burgen ohne Treppen können ihre Mauern unbesetzt lassen.
-assassins_climb: Assassinen klettern weiterhin
-assassins_climb_tooltip: Assassinen erklimmen Mauern mit ihren Haken, sodass die Treppenregel für sie nicht gilt.
-large_gatehouse_damage: Fernkampfschaden auf großem Torhaus (%)
-large_gatehouse_damage_tooltip: Truppen auf einem großen Torhaus erleiden diesen Anteil des Schadens durch Pfeile, Armbrustbolzen und Schleudersteine. Auf dem kleinen Torhaus halten Truppen länger durch; ein niedrigerer Wert gleicht das aus. 100 = unverändert.
-remember_blocked: Blockierte Wege merken (weniger Ruckler)
-remember_blocked_tooltip: |-
-  Findet die Treppenregel nach Prüfung aller Torhäuser keinen Weg für eine Einheit, wird derselbe Weg für nachfolgende Einheiten kurz übersprungen: Sie nutzen sofort die spielinterne Wegsuche. Eine gesammelt losgeschickte Armee lässt das Spiel nicht mehr ruckeln.
+stairs_needed_ai_tooltip: KI-Truppen brauchen eine Treppe, um auf Torhäuser zu gelangen.
+assassins_climb: Assassinen trotzdem klettern lassen
+assassins_climb_tooltip: Assassinen können auch bei Treppenpflicht auf Torhäuser klettern.
+large_gatehouse_damage: Fernkampfschaden an Truppen auf großen Torhäusern (%)
+large_gatehouse_damage_tooltip: 100 % entspricht normalem Fernkampfschaden.
+remember_blocked: Kürzlich blockierte Torrouten merken
+remember_blocked_tooltip: Truppen warten, bevor sie eine kürzlich durch ein feindliches Tor blockierte Route erneut versuchen.
 remember_ticks: Blockierten Weg merken für (Spielticks)
-centred_tooltip: Misst ab der Mitte des Torhauses, sodass Feinde das Schließen von jeder Seite in gleichem Abstand auslösen.
+centred_tooltip: Torhäuser messen die Nähe eines Gegners ab der Tormitte.
 tags.bugfixes: Fehlerkorrekturen
 tags.balance: Balance
+gatehouse_access: Treppen für den Zugang zu Torhäusern verlangen

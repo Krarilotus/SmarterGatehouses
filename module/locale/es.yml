@@ -1,23 +1,22 @@
 bugfixes: Correcciones de errores
 balance_changes: Cambios de equilibrio
-enemy_gates_closed: Tratar las puertas enemigas como cerradas
-enemy_gates_closed_tooltip: |-
-  Las tropas planifican su ruta evitando puertas enemigas, incluso si están abiertas. Las puertas aliadas y capturadas siguen permitiendo el paso.
+enemy_gates_closed: Las rutas tratan las puertas enemigas como cerradas
+enemy_gates_closed_tooltip: Las tropas trazan rutas rodeando las puertas enemigas aunque estén abiertas.
 centred: Medir la distancia de cierre desde el centro
-reachable_only: Ignorar enemigos que no puedan llegar a la puerta
-reachable_only_tooltip: Los enemigos tras muros, fosos o acantilados no cierran la puerta cuando su zona está desconectada.
+reachable_only: Cerrar solo ante enemigos que puedan alcanzar la puerta
+reachable_only_tooltip: Los enemigos en terreno inaccesible no activan el cierre de la puerta.
 stairs_needed: Las tropas humanas necesitan escaleras
-stairs_needed_tooltip: Las tropas humanas necesitan escaleras para subir a muros y techos de puertas. Experimental; desactivado por defecto.
+stairs_needed_tooltip: Las tropas humanas necesitan una escalera para subir a lo alto de las casas de la puerta.
 stairs_needed_ai: Las tropas de la IA necesitan escaleras
-stairs_needed_ai_tooltip: Aplica la misma regla a la IA. Los castillos sin escaleras pueden dejar sus muros sin guarnición.
-assassins_climb: Los asesinos siguen trepando muros
-assassins_climb_tooltip: Los asesinos escalan muros con sus garfios, así que la regla de escaleras no les afecta.
-large_gatehouse_damage: Daño a distancia sobre una puerta grande (%)
-large_gatehouse_damage_tooltip: Las tropas sobre una puerta grande reciben este porcentaje de daño de flechas, virotes y piedras de honda. Aguantan más en una puerta pequeña; bájalo para igualarlo. 100 = sin cambios.
-remember_blocked: Recordar rutas bloqueadas (menos tirones)
-remember_blocked_tooltip: |-
-  Cuando la regla de escaleras no encuentra camino para una unidad tras probar todas las puertas, la misma ruta se omite brevemente para las unidades siguientes: pasan directo a la búsqueda propia del juego. Un ejército enviado de golpe ya no provoca tirones.
+stairs_needed_ai_tooltip: Las tropas de la IA necesitan una escalera para subir a lo alto de las casas de la puerta.
+assassins_climb: Permitir que los asesinos trepen igualmente
+assassins_climb_tooltip: Los asesinos pueden seguir trepando a las casas de la puerta aunque se exijan escaleras.
+large_gatehouse_damage: Daño a distancia a tropas en puertas grandes (%)
+large_gatehouse_damage_tooltip: 100% aplica el daño a distancia normal.
+remember_blocked: Recordar rutas de puerta bloqueadas recientemente
+remember_blocked_tooltip: Las tropas esperan antes de reintentar una ruta bloqueada hace poco por una puerta enemiga.
 remember_ticks: Recordar una ruta bloqueada durante (ticks de juego)
-centred_tooltip: Mide desde el centro de la puerta para que los enemigos activen el cierre a la misma distancia desde cualquier lado.
+centred_tooltip: Las casas de la puerta miden la cercanía del enemigo desde el centro de la puerta.
 tags.bugfixes: Correcciones
 tags.balance: Equilibrio
+gatehouse_access: Exigir escaleras para subir a las casas de la puerta

@@ -1,23 +1,22 @@
 bugfixes: 错误修复
 balance_changes: 平衡调整
-enemy_gates_closed: 将敌方城门视为关闭
-enemy_gates_closed_tooltip: |-
-  部队会绕开敌方城门（包括敞开的城门）；友方及已占领的城门仍可通行。
-centred: 从城门中心测量关门距离
-reachable_only: 忽略无法抵达城门的敌人
-reachable_only_tooltip: 若区域互不相通，城墙、护城河或悬崖另一侧的敌人不会触发关门。
+enemy_gates_closed: 寻路时将敌方城门视为关闭
+enemy_gates_closed_tooltip: 即使敌方城门敞开，部队也会绕开它规划路线。
+centred: 从城门中心测算关门距离
+reachable_only: 仅对可抵达城门的敌人关门
+reachable_only_tooltip: 位于不可通行地形上的敌人不会触发城门关闭。
 stairs_needed: 人类玩家部队需要阶梯
-stairs_needed_tooltip: 人类玩家部队需要通过阶梯才能登上城墙和城门楼顶部。实验性功能；默认关闭。
+stairs_needed_tooltip: 玩家控制的部队需要通过阶梯才能登上城门楼顶。
 stairs_needed_ai: AI 部队也需要阶梯
-stairs_needed_ai_tooltip: 对 AI 玩家应用相同规则。未建阶梯的城堡可能会出现城墙无人驻守的情况。
-assassins_climb: 刺客仍可攀爬城墙
-assassins_climb_tooltip: 刺客使用钩索攀爬城墙，不受阶梯规则限制。
-large_gatehouse_damage: 大型城门楼承受的远程伤害（%）
-large_gatehouse_damage_tooltip: 站在大型城门楼顶部的部队受到箭矢、弩箭和投石伤害的比例。部队在小型城门楼上更耐打；调低此值可拉平差距。100 = 不变。
-remember_blocked: 记住受阻路线（减少卡顿）
-remember_blocked_tooltip: |-
-  当阶梯规则尝试所有城门后仍无法为单位找到路线时，后续单位会在短时间内跳过同一路线，直接使用游戏自带寻路。同时调动整支军队时不再引起卡顿。
+stairs_needed_ai_tooltip: AI 部队需要通过阶梯才能登上城门楼顶。
+assassins_climb: 仍允许刺客攀爬
+assassins_climb_tooltip: 即使要求经过阶梯，刺客依然可以攀上城门楼。
+large_gatehouse_damage: 大城门楼上部队的远程承伤（%）
+large_gatehouse_damage_tooltip: 100% 表示正常远程伤害。
+remember_blocked: 记住近期受阻的城门路线
+remember_blocked_tooltip: 部队会在短暂等待后再重试近期被敌方城门挡住的路线。
 remember_ticks: 记住受阻路线的时长（游戏刻）
-centred_tooltip: 从城门楼中心测距，使敌人从任一方向接近都在相同距离触发关门。
+centred_tooltip: 城门楼从城门正中央计算敌人的接近距离。
 tags.bugfixes: 错误修复
 tags.balance: 平衡
+gatehouse_access: 登上城门楼必须经过阶梯

@@ -232,6 +232,11 @@ local patched = {}
 local function scanOptional(pattern, purpose)
   local found, address = pcall(core.AOBScan, pattern)
   if not found or not address or address == 0 then
+    if purpose == "the route search" then
+      log(ERROR, "Gate route rules and reachable-only gate detection are off. The route search could not be bound.")
+    elseif purpose == "the call that searches a unit's route" then
+      log(ERROR, "Gate route rules are off. The route call could not be bound.")
+    end
     log(WARNING, "smarter-gatehouses: could not find " .. purpose
       .. "; the part of the module that needs it is off. Another module has probably "
       .. "patched the same code.")
@@ -351,7 +356,7 @@ return {
       linkGates = nil
     end
     if linkGates == nil then
-      log(WARNING, "smarter-gatehouses: nothing was changed.")
+      log(ERROR, "Smarter Gatehouses is off. The gatehouse link code could not be verified.")
       return
     end
 
@@ -367,8 +372,7 @@ return {
     if enemyClosedOn or stairsOn or stairsAiOn or reachableOn then
       search = scanOptional(AOB_DO_PATHFINDING, "the route search")
       if search and another(AOB_DO_PATHFINDING, search) then
-        log(WARNING, "smarter-gatehouses: the game's route search matches more than once; the "
-          .. "gate route rules and the reachable-only check are off.")
+        log(ERROR, "Gate route rules and reachable-only gate detection are off. The route search is ambiguous.")
         search = nil
       end
       if search == nil then
@@ -380,8 +384,7 @@ return {
     if enemyClosedOn or stairsOn or stairsAiOn then
       routeSite = scanOptional(AOB_PATH_CALL, "the call that searches a unit's route")
       if routeSite and another(AOB_PATH_CALL, routeSite) then
-        log(WARNING, "smarter-gatehouses: the route call matches more than once; the gate route "
-          .. "rules are off.")
+        log(ERROR, "Gate route rules are off. The route call is ambiguous.")
         routeSite = nil
       end
       if routeSite then
@@ -391,8 +394,7 @@ return {
             tickCounter = counter
           end
           if tickCounter == nil then
-            log(WARNING, "smarter-gatehouses: could not resolve the game's tick counter; blocked trips "
-              .. "are not remembered.")
+            log(ERROR, "Remembering blocked gate trips is off. The game tick counter could not be read.")
           end
         end
         routes = modules["route-search"]
@@ -403,6 +405,7 @@ return {
         if ok then
           route = policy
         else
+          log(ERROR, "Gate route rules are off. The routing policy could not be registered.")
           log(WARNING, "smarter-gatehouses: the route search is unavailable (" .. tostring(policy)
             .. "); the gate route rules are off.")
           routeSite = nil
@@ -653,6 +656,7 @@ return {
         })
         local active, problem = pcall(routes.enablePolicy, routes, ROUTE_POLICY.id, pathSearch)
         if not active then
+          log(ERROR, "Gate route rules are off. The routing policy could not start.")
           log(WARNING, "smarter-gatehouses: the route search is unavailable (" .. tostring(problem)
             .. "); the gate route rules are off.")
           enemyClosedOn, stairsOn, stairsAiOn = false, false, false

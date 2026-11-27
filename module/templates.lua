@@ -1327,6 +1327,9 @@ mov ebp, ecx
 xor ebx, ebx
 mov dword [RULES_NOW], 0
 mov dword [RECORD], 0
+mov eax, [TOP_ENABLED]
+or eax, [AI_ENABLED]
+jz search
 cmp dword [ASSASSINS_FREE], 0
 je who
 cmp word [esi+UNIT_TYPE], 0x49

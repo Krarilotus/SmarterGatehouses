@@ -338,7 +338,15 @@ end
 return {
 
   enable = function(self, config)
+    if config ~= nil and type(config) ~= "table" then
+      log(ERROR, "Gatehouse Fixes settings must be a table.")
+    end
     config = type(config) == "table" and config or {}
+    for group in pairs(DEFAULTS) do
+      if config[group] ~= nil and type(config[group]) ~= "table" then
+        log(ERROR, "Gatehouse Fixes: " .. group .. " settings must be a table.")
+      end
+    end
 
     local enemyClosedOn = setting(config, "pathing", "enemy_gates_closed")
     local centredOn = setting(config, "detection", "centred")
@@ -348,6 +356,8 @@ return {
     local assassinsOn = setting(config, "walls", "assassins_climb")
     local largeDamage = number(config, "damage", "large_gatehouse", 0, 100)
     local routing = enemyClosedOn or stairsOn or stairsAiOn
+    local rememberBlocked = routing and setting(config, "pathing", "remember_blocked")
+    local rememberTicks = rememberBlocked and number(config, "pathing", "remember_ticks", 1, 10000)
     if not (routing or centredOn or reachableOn or largeDamage ~= 100) then
       log(INFO, "Gatehouse Fixes is using the game's settings.")
       return
@@ -449,9 +459,7 @@ return {
         end
         local pathfinding = readAddress(scan(AOB_PATH_CALL, "the unit route search call") + PATH_STATE_OPERAND)
         local teamSite = scan(AOB_PLAYER_TEAMS, "the team of each player")
-        local layers = tileLayers()
-        local aicSite = scan(AOB_PLAYER_AIC, "which players are human")
-        local playerAic = readAddress(aicSite + PLAYER_AIC_OPERAND)
+        local playerAic, buildingMap, gateOrTower, tileFlags = 0, 0, 0, 0
 
         local cutSides = core.allocateAssembly(templates.cut_sides .. cutMasks(), {
           CUT_X = control + C.CUT_X,
@@ -493,9 +501,6 @@ return {
           PATHFINDING = pathfinding,
           LINK_GATES = linkGates,
         })
-        local buildingMap = readAddress(layers + LAYERS_BUILDING_MAP_OPERAND)
-        local gateOrTower = readAddress(layers + LAYERS_GATE_OR_TOWER_OPERAND)
-        local tileFlags = readAddress(layers + LAYERS_TILE_FLAGS_OPERAND)
 
         -- "Can the rule get this unit there at all", for the search, the cursor and the
         -- move order. Without the game's area test it cannot be answered, and the stairs
@@ -504,6 +509,12 @@ return {
         local stairPatches = {}
         if stairsOn or stairsAiOn then
           local ready = install("Gatehouse stair rules", function()
+            local aicSite = scan(AOB_PLAYER_AIC, "which players are human")
+            playerAic = readAddress(aicSite + PLAYER_AIC_OPERAND)
+            local layers = tileLayers()
+            buildingMap = readAddress(layers + LAYERS_BUILDING_MAP_OPERAND)
+            gateOrTower = readAddress(layers + LAYERS_GATE_OR_TOWER_OPERAND)
+            tileFlags = readAddress(layers + LAYERS_TILE_FLAGS_OPERAND)
             local canNavigate = scan(AOB_CAN_NAVIGATE, "the game's area-to-area test")
             directions = scan(AOB_DIRECTIONS, "the route step directions")
             ruleOk = core.allocateAssembly(templates.rule_ok, {
@@ -625,7 +636,7 @@ return {
 
         -- Trips the whole retry chain found nothing for, so the rest of an army skips it.
         local tickCounter
-        if setting(config, "pathing", "remember_blocked") then
+        if rememberBlocked then
           local ready, counter = install("Remembering blocked gate trips", function()
             return readAddress(scan(AOB_TICKS, "the game tick counter") + 8)
           end)
@@ -635,7 +646,7 @@ return {
         local remember = blocked + BLOCKED_ENTRIES * 12
         writeInteger(remember, tickCounter ~= nil and 1 or 0)
         if tickCounter then
-          writeInteger(remember + 4, number(config, "pathing", "remember_ticks", 1, 10000))
+          writeInteger(remember + 4, rememberTicks)
         end
         local blockedTrips = core.allocateAssembly(templates.blocked_trips, {
           BLOCKED_ON = remember,
@@ -693,19 +704,22 @@ return {
           GATE_OR_TOWER = gateOrTower,
           TILE_FLAGS = tileFlags,
         })
+        if tickCounter then
+          local ready = install("Remembering blocked gate trips", function()
+            local function resetBlockedTrips()
+              core.setMemory(blocked, 0, BLOCKED_ENTRIES * 12)
+              core.setMemory(remember + 8, 0, 20)
+            end
+            modules["map-extensions"]:registerSection("smarter-gatehouses", {
+              initialize = resetBlockedTrips,
+              deserialize = resetBlockedTrips,
+              serialize = function() end,
+            })
+          end)
+          if not ready then writeInteger(remember, 0) end
+        end
         routes:enablePolicy(ROUTE_POLICY.id, pathSearch)
         for _, prepared in ipairs(stairPatches) do patch(prepared[1], prepared[2]) end
-        if tickCounter then
-          local function resetBlockedTrips()
-            core.setMemory(blocked, 0, BLOCKED_ENTRIES * 12)
-            core.setMemory(remember + 8, 0, 20)
-          end
-          modules["map-extensions"]:registerSection("smarter-gatehouses", {
-            initialize = resetBlockedTrips,
-            deserialize = resetBlockedTrips,
-            serialize = function() end,
-          })
-        end
       end)
     end
 

@@ -2,7 +2,7 @@ bugfixes: Fehlerkorrekturen
 balance_changes: Balance-Änderungen
 enemy_gates_closed: Routen behandeln feindliche Tore als geschlossen
 enemy_gates_closed_tooltip: Truppen planen Routen um feindliche Tore herum, selbst wenn diese offen stehen.
-centred: Torschließ-Abstand ab der Mitte messen
+centred: Abstand zum Schließen ab Tormitte messen
 reachable_only: Nur für Gegner schließen, die das Tor erreichen können
 reachable_only_tooltip: Gegner auf unzugänglichem Gelände lösen das Schließen nicht aus.
 stairs_needed: Spielertruppen brauchen Treppen

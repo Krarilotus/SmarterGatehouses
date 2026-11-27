@@ -120,7 +120,7 @@ local TRIBE_HOOK_SIZE = 8
 
 -- The game's tick counter: mov ecx, [edi+0x998] / mov edx, [ticks] in updateUnits. The mask
 -- load before it is patched by other modules.
-local AOB_TICKS = "8B 8F 98 09 00 00 8B 15"
+local AOB_TICKS = "8B 8F 98 09 00 00 8B 15 ? ? ? ?"
 -- Blocked trips remembered (a power of two): KEY1, KEY2, tick.
 local BLOCKED_ENTRIES = 32
 
@@ -223,26 +223,16 @@ local writeInteger = core.writeInteger
 
 local patched = {}
 
----Scan for a pattern this module can live without. Modules load in the order the config
----lists them and rewrite game code as they go, so a pattern that has been overwritten has
----to switch its feature off, not take the game down at launch.
----@param pattern string
----@param purpose string
----@return number|nil
-local function scanOptional(pattern, purpose)
-  local found, address = pcall(core.AOBScan, pattern)
-  if not found or not address or address == 0 then
-    if purpose == "the route search" then
-      log(ERROR, "Gate route rules and reachable-only gate detection are off. The route search could not be bound.")
-    elseif purpose == "the call that searches a unit's route" then
-      log(ERROR, "Gate route rules are off. The route call could not be bound.")
-    end
-    log(WARNING, "smarter-gatehouses: could not find " .. purpose
-      .. "; the part of the module that needs it is off. Another module has probably "
-      .. "patched the same code.")
-    return nil
-  end
+local function scan(pattern, purpose)
+  local address, reason = core.AOBScanUnique(pattern)
+  if not address then error(purpose .. " " .. reason, 0) end
   return address
+end
+
+local function install(feature, fn)
+  local ok, result = pcall(fn)
+  if not ok then log(ERROR, feature .. " is off. " .. tostring(result)) end
+  return ok, result
 end
 
 ---True when the bytes at base + offset are the ones this module expects.
@@ -321,18 +311,34 @@ end
 ---@param name string
 ---@return boolean
 local function setting(config, group, name)
-  local section = config and config[group]
-  local value = section and section[name]
-  if value == nil then
-    value = DEFAULTS[group][name]
+  local section = config[group]
+  if type(section) ~= "table" then return DEFAULTS[group][name] end
+  local value = section[name]
+  if value == nil then return DEFAULTS[group][name] end
+  if type(value) == "boolean" then return value end
+  log(ERROR, name .. " must be on or off. Using the default.")
+  return DEFAULTS[group][name]
+end
+
+local function number(config, group, name, low, high)
+  local section = config[group]
+  if type(section) ~= "table" then return DEFAULTS[group][name] end
+  local value = section[name]
+  if value == nil then return DEFAULTS[group][name] end
+  if type(value) ~= "number" then
+    log(ERROR, name .. " must be a number. Using the default.")
+  elseif value >= low and value <= high and value % 1 == 0 then
+    return value
+  else
+    log(WARNING, name .. " is outside the allowed values. Using the default.")
   end
-  return value and true or false
+  return DEFAULTS[group][name]
 end
 
 return {
 
   enable = function(self, config)
-    config = config or {}
+    config = type(config) == "table" and config or {}
 
     local enemyClosedOn = setting(config, "pathing", "enemy_gates_closed")
     local centredOn = setting(config, "detection", "centred")
@@ -340,86 +346,50 @@ return {
     local stairsOn = setting(config, "walls", "stairs_needed")
     local stairsAiOn = setting(config, "walls", "stairs_needed_ai")
     local assassinsOn = setting(config, "walls", "assassins_climb")
-    local largeDamage = DEFAULTS.damage.large_gatehouse
-    if config.damage and type(config.damage.large_gatehouse) == "number" then
-      largeDamage = math.tointeger(math.floor(config.damage.large_gatehouse)) or largeDamage
-    end
-    largeDamage = math.max(0, math.min(100, largeDamage))
-
-    ---------------------------------------------------------------------------------
-    -- Find the game code
-    ---------------------------------------------------------------------------------
-
-    local linkGates = scanOptional(AOB_LINK_GATES, "the gatehouse link function")
-    if linkGates ~= nil and not guardsHold(linkGates, LINK_GUARDS,
-        "the gatehouse link function") then
-      linkGates = nil
-    end
-    if linkGates == nil then
-      log(ERROR, "Smarter Gatehouses is off. The gatehouse link code could not be verified.")
+    local largeDamage = number(config, "damage", "large_gatehouse", 0, 100)
+    local routing = enemyClosedOn or stairsOn or stairsAiOn
+    if not (routing or centredOn or reachableOn or largeDamage ~= 100) then
+      log(INFO, "Gatehouse Fixes is using the game's settings.")
       return
     end
 
-    -- Another match before or after the one found means the binding is not unique.
-    local function another(pattern, at)
-      local first, nextAt = core.scanForAOB(pattern), core.scanForAOB(pattern, at + 1)
-      return first ~= at or (nextAt ~= nil and nextAt ~= 0)
+    local linkGates, reason = core.AOBScanUnique(AOB_LINK_GATES)
+    if not linkGates or not guardsHold(linkGates, LINK_GUARDS, "the gatehouse link function") then
+      local features = {}
+      if routing then features[#features + 1] = "gate route rules" end
+      if centredOn then features[#features + 1] = "centered gate detection" end
+      if reachableOn then features[#features + 1] = "reachable-only gate detection" end
+      if largeDamage ~= 100 then features[#features + 1] = "large gatehouse damage" end
+      log(ERROR, "Unavailable: " .. table.concat(features, ", ")
+        .. ". The gatehouse link code was " .. (reason or "not verified") .. ".")
+      return
     end
 
-    -- The route search's row table and area map: read by the route rules and by the
-    -- reachable-only check, which stay off without a unique match.
     local search
-    if enemyClosedOn or stairsOn or stairsAiOn or reachableOn then
-      search = scanOptional(AOB_DO_PATHFINDING, "the route search")
-      if search and another(AOB_DO_PATHFINDING, search) then
-        log(ERROR, "Gate route rules and reachable-only gate detection are off. The route search is ambiguous.")
-        search = nil
-      end
-      if search == nil then
-        enemyClosedOn, stairsOn, stairsAiOn, reachableOn = false, false, false, false
+    if routing or reachableOn then
+      search, reason = core.AOBScanUnique(AOB_DO_PATHFINDING)
+      if not search then
+        if routing then log(ERROR, "Gate route rules are off. The route search was " .. reason .. ".") end
+        if reachableOn then
+          log(ERROR, "Reachable-only gate detection is off. The route search was " .. reason .. ".")
+        end
+        routing, reachableOn = false, false
       end
     end
 
-    local routeSite, routes, route, tickCounter
-    if enemyClosedOn or stairsOn or stairsAiOn then
-      routeSite = scanOptional(AOB_PATH_CALL, "the call that searches a unit's route")
-      if routeSite and another(AOB_PATH_CALL, routeSite) then
-        log(ERROR, "Gate route rules are off. The route call is ambiguous.")
-        routeSite = nil
-      end
-      if routeSite then
-        if setting(config, "pathing", "remember_blocked") then
-          local found, site, counter = pcall(utils.AOBExtract, AOB_TICKS .. " I(? ? ? ?)")
-          if found and not another(AOB_TICKS .. " ? ? ? ?", site) then
-            tickCounter = counter
-          end
-          if tickCounter == nil then
-            log(ERROR, "Remembering blocked gate trips is off. The game tick counter could not be read.")
-          end
-        end
-        routes = modules["route-search"]
-        if not routes or (routes.version or 0) < 1 then
-          error("smarter-gatehouses: the gate route rules need the route-search module (version 1)")
-        end
-        local ok, policy = pcall(routes.addPolicy, routes, ROUTE_POLICY)
-        if ok then
-          route = policy
-        else
-          log(ERROR, "Gate route rules are off. The routing policy could not be registered.")
-          log(WARNING, "smarter-gatehouses: the route search is unavailable (" .. tostring(policy)
-            .. "); the gate route rules are off.")
-          routeSite = nil
-          enemyClosedOn, stairsOn, stairsAiOn = false, false, false
-        end
-      end
-    end
-
-    local buildings = (readAddress(linkGates + LINK_BUILDING_X_OPERAND) - BUILDING_X)
-      & 0xFFFFFFFF
+    local buildings = (readAddress(linkGates + LINK_BUILDING_X_OPERAND) - BUILDING_X) & 0xFFFFFFFF
     local linkage = readAddress(linkGates + LINK_LAYER_OPERAND)
     local rowTable = search and readAddress(search + SEARCH_ROW_TABLE_OPERAND) or 0
     local areaMap = search and readAddress(search + SEARCH_AREA_MAP_OPERAND) or 0
 
+    local layerSite, layerProblem
+    local function tileLayers()
+      if not layerSite and not layerProblem then
+        layerSite, layerProblem = core.AOBScanUnique(AOB_TILE_LAYERS)
+      end
+      if not layerSite then error("The tile layers were " .. layerProblem .. ".", 0) end
+      return layerSite
+    end
     local control = core.allocate(C.SIZE, true)
     writeInteger(control + C.CENTRE_ENABLED, centredOn and 1 or 0)
     writeInteger(control + C.REACH_ENABLED, reachableOn and 1 or 0)
@@ -433,8 +403,13 @@ return {
     ---------------------------------------------------------------------------------
 
     if centredOn or reachableOn then
-      local site = scanOptional(AOB_DETECT, "the gatehouse's enemy check")
-      if site ~= nil and guardsHold(site, DETECT_GUARDS, "the gatehouse's enemy check") then
+      local feature = centredOn and reachableOn and "Centered and reachable-only gate detection"
+        or centredOn and "Centered gate detection" or "Reachable-only gate detection"
+      install(feature, function()
+        local site = scan(AOB_DETECT, "the gatehouse's enemy check")
+        if not guardsHold(site, DETECT_GUARDS, "the gatehouse's enemy check") then
+          error("The enemy check layout could not be verified.", 0)
+        end
         local units = (readAddress(site + DETECT_MICROX_OPERAND) - UNIT_MICROX) & 0xFFFFFFFF
         local found = site + DETECT_FOUND_JUMP + 2
           + (readByte(site + DETECT_FOUND_JUMP + 1) & 0x7F)
@@ -459,21 +434,24 @@ return {
           FOUND = found,
         })
         patch(site, branch(0xE9, site, detect, DETECT_HOOK_SIZE))
-      end
+      end)
     end
 
     ---------------------------------------------------------------------------------
     -- Route finding
     ---------------------------------------------------------------------------------
 
-    if routeSite then
-      local site = routeSite
-      local teamSite = scanOptional(AOB_PLAYER_TEAMS, "the team of each player")
-      local layers = scanOptional(AOB_TILE_LAYERS, "the tile layers")
-      local aicSite = scanOptional(AOB_PLAYER_AIC, "which players are human")
-      if site ~= nil and teamSite ~= nil and layers ~= nil and aicSite ~= nil then
+    if routing then
+      install("Gate route rules", function()
+        local routes = modules["route-search"]
+        if not routes or (routes.version or 0) < 1 then
+          error("Route Search version 1 is required.", 0)
+        end
+        local pathfinding = readAddress(scan(AOB_PATH_CALL, "the unit route search call") + PATH_STATE_OPERAND)
+        local teamSite = scan(AOB_PLAYER_TEAMS, "the team of each player")
+        local layers = tileLayers()
+        local aicSite = scan(AOB_PLAYER_AIC, "which players are human")
         local playerAic = readAddress(aicSite + PLAYER_AIC_OPERAND)
-        local pathfinding = readAddress(site + PATH_STATE_OPERAND)
 
         local cutSides = core.allocateAssembly(templates.cut_sides .. cutMasks(), {
           CUT_X = control + C.CUT_X,
@@ -522,33 +500,87 @@ return {
         -- "Can the rule get this unit there at all", for the search, the cursor and the
         -- move order. Without the game's area test it cannot be answered, and the stairs
         -- rule is left off rather than half on.
-        local ruleOk
-        local canNavigate = (stairsOn or stairsAiOn)
-          and scanOptional(AOB_CAN_NAVIGATE, "the game's area-to-area test") or nil
-        local directions = (stairsOn or stairsAiOn)
-          and scanOptional(AOB_DIRECTIONS, "the route step directions") or nil
-        if canNavigate ~= nil and directions ~= nil then
-          ruleOk = core.allocateAssembly(templates.rule_ok, {
-            ROW_TABLE = rowTable,
-            AREA_MAP = areaMap,
-            BUILDING_MAP = buildingMap,
-            BUILDINGS = buildings,
-            GATE_OR_TOWER = gateOrTower,
-            TILE_FLAGS = tileFlags,
-            PATHFINDING = pathfinding,
-            CLIMBS = pathfinding + CLIMB_DATA,
-            MAX_CLIMBS = MAX_CLIMBS,
-            SHADOW = control + C.SHADOW,
-            CAN_NAV = canNavigate,
-            ASSASSINS_FREE = control + C.ASSASSINS_FREE,
-          })
-        else
-          stairsOn = false
-          stairsAiOn = false
-          writeInteger(control + C.TOP_ENABLED, 0)
-          writeInteger(control + C.AI_ENABLED, 0)
+        local ruleOk, directions
+        local stairPatches = {}
+        if stairsOn or stairsAiOn then
+          local ready = install("Gatehouse stair rules", function()
+            local canNavigate = scan(AOB_CAN_NAVIGATE, "the game's area-to-area test")
+            directions = scan(AOB_DIRECTIONS, "the route step directions")
+            ruleOk = core.allocateAssembly(templates.rule_ok, {
+              ROW_TABLE = rowTable,
+              AREA_MAP = areaMap,
+              BUILDING_MAP = buildingMap,
+              BUILDINGS = buildings,
+              GATE_OR_TOWER = gateOrTower,
+              TILE_FLAGS = tileFlags,
+              PATHFINDING = pathfinding,
+              CLIMBS = pathfinding + CLIMB_DATA,
+              MAX_CLIMBS = MAX_CLIMBS,
+              SHADOW = control + C.SHADOW,
+              CAN_NAV = canNavigate,
+              ASSASSINS_FREE = control + C.ASSASSINS_FREE,
+            })
+            local cursorSite = scan(AOB_MOVE_CURSOR, "the troops' move cursor")
+            local units = readAddress(cursorSite + CURSOR_UNITS_STATE_OPERAND) + UNIT_START
+            if stairsOn then
+              -- The "can't go there" cursor for a target the rule rules out.
+              local mouseSite = scan(AOB_MOUSE_TILE, "the mouse's tile")
+              local hook = cursorSite + CURSOR_HOOK
+              local cursor = core.allocateAssembly(templates.cursor, {
+                UNITS_STATE = readAddress(cursorSite + CURSOR_UNITS_STATE_OPERAND),
+                CAN_A_UNIT_CLIMB = callTarget(cursorSite + CURSOR_CAN_CLIMB_CALL),
+                MOUSE_X = readAddress(mouseSite + MOUSE_X_OPERAND),
+                MOUSE_Y = readAddress(mouseSite + MOUSE_Y_OPERAND),
+                UNITS = units,
+                RULE_OK = ruleOk,
+                RESUME = cursorSite + CURSOR_RESUME,
+              })
+              stairPatches[#stairPatches + 1] = {hook, branch(0xE9, hook, cursor, CURSOR_HOOK_SIZE)}
+            end
+
+            -- Who is in a passage and who is on a roof, by how they got onto the gatehouse.
+            local flagSite = scan(AOB_PASSAGE_FLAG, "the passage-or-roof decision")
+            local hook = flagSite + PASSAGE_HOOK
+            local flag = core.allocateAssembly(templates.passage_flag, {
+              UNITS = (readAddress(flagSite + PASSAGE_TILE_OPERAND) - 0xD8) & 0xFFFFFFFF,
+              PLAYER_AIC = playerAic,
+              TOP_ENABLED = control + C.TOP_ENABLED,
+              AI_ENABLED = control + C.AI_ENABLED,
+              ASSASSINS_FREE = control + C.ASSASSINS_FREE,
+              BUILDING_MAP = buildingMap,
+              BUILDINGS = buildings,
+              ROW_TABLE = rowTable,
+              RESUME = hook + PASSAGE_HOOK_SIZE,
+              DONE = flagSite + PASSAGE_HOOK + (readByte(flagSite + PASSAGE_DONE_JUMP + 1) & 0x7F),
+            })
+            stairPatches[#stairPatches + 1] = {hook, branch(0xE9, hook, flag, PASSAGE_HOOK_SIZE)}
+
+            -- The move order for an unreachable target is withheld.
+            local tribeSite = scan(AOB_TRIBE_MOVE, "the troops' move order")
+            local hook = tribeSite + TRIBE_HOOK
+            local move = core.allocateAssembly(templates.tribe_move, {
+              UNITS = units,
+              PLAYER_AIC = playerAic,
+              TOP_ENABLED = control + C.TOP_ENABLED,
+              AI_ENABLED = control + C.AI_ENABLED,
+              RULE_OK = ruleOk,
+              FAIL = jumpTarget(tribeSite + TRIBE_GIVE_UP_JUMP),
+              RESUME = hook + TRIBE_HOOK_SIZE,
+            })
+            stairPatches[#stairPatches + 1] = {hook, branch(0xE9, hook, move, TRIBE_HOOK_SIZE)}
+          end)
+          if not ready then
+            stairsOn, stairsAiOn = false, false
+            writeInteger(control + C.TOP_ENABLED, 0)
+            writeInteger(control + C.AI_ENABLED, 0)
+            if not enemyClosedOn then return end
+            stairPatches = {}
+          end
+        end
+        if not (stairsOn or stairsAiOn) then
           ruleOk = core.allocateCode({ 0xB8, 0x01, 0x00, 0x00, 0x00, 0xC2, 0x10, 0x00 })
         end
+        local route = routes:addPolicy(ROUTE_POLICY)
 
         local chainBuild = core.allocateAssembly(templates.chain_build, {
           CHAIN = control + C.CHAIN,
@@ -592,12 +624,19 @@ return {
         local routeOk = core.allocateAssembly(templates.route_ok, routeValues)
 
         -- Trips the whole retry chain found nothing for, so the rest of an army skips it.
+        local tickCounter
+        if setting(config, "pathing", "remember_blocked") then
+          local ready, counter = install("Remembering blocked gate trips", function()
+            return readAddress(scan(AOB_TICKS, "the game tick counter") + 8)
+          end)
+          if ready then tickCounter = counter end
+        end
         local blocked = core.allocate(BLOCKED_ENTRIES * 12 + 32, true)
         local remember = blocked + BLOCKED_ENTRIES * 12
         writeInteger(remember, tickCounter ~= nil and 1 or 0)
-        local ticks = config.pathing and tonumber(config.pathing.remember_ticks)
-          or DEFAULTS.pathing.remember_ticks
-        writeInteger(remember + 4, math.max(1, math.min(10000, math.floor(ticks))))
+        if tickCounter then
+          writeInteger(remember + 4, number(config, "pathing", "remember_ticks", 1, 10000))
+        end
         local blockedTrips = core.allocateAssembly(templates.blocked_trips, {
           BLOCKED_ON = remember,
           RECORD = remember + 16,
@@ -654,13 +693,9 @@ return {
           GATE_OR_TOWER = gateOrTower,
           TILE_FLAGS = tileFlags,
         })
-        local active, problem = pcall(routes.enablePolicy, routes, ROUTE_POLICY.id, pathSearch)
-        if not active then
-          log(ERROR, "Gate route rules are off. The routing policy could not start.")
-          log(WARNING, "smarter-gatehouses: the route search is unavailable (" .. tostring(problem)
-            .. "); the gate route rules are off.")
-          enemyClosedOn, stairsOn, stairsAiOn = false, false, false
-        elseif tickCounter ~= nil then
+        routes:enablePolicy(ROUTE_POLICY.id, pathSearch)
+        for _, prepared in ipairs(stairPatches) do patch(prepared[1], prepared[2]) end
+        if tickCounter then
           local function resetBlockedTrips()
             core.setMemory(blocked, 0, BLOCKED_ENTRIES * 12)
             core.setMemory(remember + 8, 0, 20)
@@ -671,71 +706,7 @@ return {
             serialize = function() end,
           })
         end
-
-        local cursorSite = (stairsOn or stairsAiOn)
-          and scanOptional(AOB_MOVE_CURSOR, "the troops' move cursor") or nil
-        local units
-        if cursorSite ~= nil then
-          units = readAddress(cursorSite + CURSOR_UNITS_STATE_OPERAND) + UNIT_START
-        end
-        if stairsOn then
-          -- The "can't go there" cursor for a target the rule rules out.
-          local mouseSite = scanOptional(AOB_MOUSE_TILE, "the mouse's tile")
-          if cursorSite ~= nil and mouseSite ~= nil then
-            local hook = cursorSite + CURSOR_HOOK
-            local cursor = core.allocateAssembly(templates.cursor, {
-              UNITS_STATE = readAddress(cursorSite + CURSOR_UNITS_STATE_OPERAND),
-              CAN_A_UNIT_CLIMB = callTarget(cursorSite + CURSOR_CAN_CLIMB_CALL),
-              MOUSE_X = readAddress(mouseSite + MOUSE_X_OPERAND),
-              MOUSE_Y = readAddress(mouseSite + MOUSE_Y_OPERAND),
-              UNITS = units,
-              RULE_OK = ruleOk,
-              RESUME = cursorSite + CURSOR_RESUME,
-            })
-            patch(hook, branch(0xE9, hook, cursor, CURSOR_HOOK_SIZE))
-          end
-
-        end
-
-        -- Who is in a passage and who is on a roof, by how they got onto the gatehouse.
-        if stairsOn or stairsAiOn then
-          local flagSite = scanOptional(AOB_PASSAGE_FLAG, "the passage-or-roof decision")
-          if flagSite ~= nil then
-            local hook = flagSite + PASSAGE_HOOK
-            local flag = core.allocateAssembly(templates.passage_flag, {
-              UNITS = (readAddress(flagSite + PASSAGE_TILE_OPERAND) - 0xD8) & 0xFFFFFFFF,
-              PLAYER_AIC = playerAic,
-              TOP_ENABLED = control + C.TOP_ENABLED,
-              AI_ENABLED = control + C.AI_ENABLED,
-              ASSASSINS_FREE = control + C.ASSASSINS_FREE,
-              BUILDING_MAP = buildingMap,
-              BUILDINGS = buildings,
-              ROW_TABLE = rowTable,
-              RESUME = hook + PASSAGE_HOOK_SIZE,
-              DONE = flagSite + PASSAGE_HOOK + (readByte(flagSite + PASSAGE_DONE_JUMP + 1) & 0x7F),
-            })
-            patch(hook, branch(0xE9, hook, flag, PASSAGE_HOOK_SIZE))
-          end
-        end
-
-        -- ... and the move order for it is never given, so nobody starts walking.
-        if stairsOn or stairsAiOn then
-          local tribeSite = scanOptional(AOB_TRIBE_MOVE, "the troops' move order")
-          if tribeSite ~= nil and units ~= nil then
-            local hook = tribeSite + TRIBE_HOOK
-            local move = core.allocateAssembly(templates.tribe_move, {
-              UNITS = units,
-              PLAYER_AIC = playerAic,
-              TOP_ENABLED = control + C.TOP_ENABLED,
-              AI_ENABLED = control + C.AI_ENABLED,
-              RULE_OK = ruleOk,
-              FAIL = jumpTarget(tribeSite + TRIBE_GIVE_UP_JUMP),
-              RESUME = hook + TRIBE_HOOK_SIZE,
-            })
-            patch(hook, branch(0xE9, hook, move, TRIBE_HOOK_SIZE))
-          end
-        end
-      end
+      end)
     end
 
     ---------------------------------------------------------------------------------
@@ -743,9 +714,9 @@ return {
     ---------------------------------------------------------------------------------
 
     if largeDamage ~= 100 then
-      local site = scanOptional(AOB_UNIT_DAMAGE, "where a projectile hurts a unit")
-      local layers = scanOptional(AOB_TILE_LAYERS, "the tile layers")
-      if site ~= nil and layers ~= nil then
+      install("Large gatehouse damage", function()
+        local site = scan(AOB_UNIT_DAMAGE, "where a projectile hurts a unit")
+        local layers = tileLayers()
         local hook = core.allocateAssembly(templates.gate_damage, {
           BUILDING_MAP = readAddress(layers + LAYERS_BUILDING_MAP_OPERAND),
           BUILDINGS = buildings,
@@ -753,15 +724,9 @@ return {
           RESUME = site + UNIT_DAMAGE_HOOK_SIZE,
         })
         patch(site, branch(0xE9, site, hook, UNIT_DAMAGE_HOOK_SIZE))
-      end
+      end)
     end
-
-    log(INFO, string.format(
-      "smarter-gatehouses: enemy gates closed %s, centred %s, reachable only %s, stairs "
-      .. "needed %s, for the AI %s, assassins climb %s, large gatehouse damage %d%%; %d "
-      .. "place(s) in the game changed.",
-      tostring(enemyClosedOn), tostring(centredOn), tostring(reachableOn),
-      tostring(stairsOn), tostring(stairsAiOn), tostring(assassinsOn), largeDamage, #patched))
+    log(INFO, string.format("Gatehouse Fixes: %d place(s) in the game changed.", #patched))
   end,
 
   disable = function(self, config)

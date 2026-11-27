@@ -1,7 +1,7 @@
 name: smarter-gatehouses
 display-name: Gatehouse Fixes
 type: module
-version: 1.0.10
+version: 1.0.11
 author: Monsterfish
 meta:
   version: 1.0.0
@@ -12,7 +12,7 @@ tags:
 - bugfixes
 - balance
 dependencies:
-  framework: ^3.0.7
+  framework: ^3.0.8
   frontend: ^1.0.2
   map-extensions: ^1.0.0
   route-search: ^1.0.0

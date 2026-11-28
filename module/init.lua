@@ -224,8 +224,8 @@ local writeInteger = core.writeInteger
 local patched = {}
 
 local function scan(pattern, purpose)
-  local address, reason = core.AOBScanUnique(pattern)
-  if not address then error(purpose .. " " .. reason, 0) end
+  local found, address = pcall(core.AOBScan, pattern)
+  if not found then error(purpose .. " not found", 0) end
   return address
 end
 
@@ -363,25 +363,26 @@ return {
       return
     end
 
-    local linkGates, reason = core.AOBScanUnique(AOB_LINK_GATES)
-    if not linkGates or not guardsHold(linkGates, LINK_GUARDS, "the gatehouse link function") then
+    local found, linkGates = pcall(core.AOBScan, AOB_LINK_GATES)
+    if not found or not guardsHold(linkGates, LINK_GUARDS, "the gatehouse link function") then
       local features = {}
       if routing then features[#features + 1] = "gate route rules" end
       if centredOn then features[#features + 1] = "centered gate detection" end
       if reachableOn then features[#features + 1] = "reachable-only gate detection" end
       if largeDamage ~= 100 then features[#features + 1] = "large gatehouse damage" end
       log(ERROR, "Unavailable: " .. table.concat(features, ", ")
-        .. ". The gatehouse link code was " .. (reason or "not verified") .. ".")
+        .. ". The gatehouse link code was " .. (found and "not verified" or "not found") .. ".")
       return
     end
 
     local search
     if routing or reachableOn then
-      search, reason = core.AOBScanUnique(AOB_DO_PATHFINDING)
+      local found, address = pcall(core.AOBScan, AOB_DO_PATHFINDING)
+      search = found and address or nil
       if not search then
-        if routing then log(ERROR, "Gate route rules are off. The route search was " .. reason .. ".") end
+        if routing then log(ERROR, "Gate route rules are off. The route search was not found.") end
         if reachableOn then
-          log(ERROR, "Reachable-only gate detection is off. The route search was " .. reason .. ".")
+          log(ERROR, "Reachable-only gate detection is off. The route search was not found.")
         end
         routing, reachableOn = false, false
       end
@@ -395,7 +396,8 @@ return {
     local layerSite, layerProblem
     local function tileLayers()
       if not layerSite and not layerProblem then
-        layerSite, layerProblem = core.AOBScanUnique(AOB_TILE_LAYERS)
+        local found, address = pcall(core.AOBScan, AOB_TILE_LAYERS)
+        if found then layerSite = address else layerProblem = "not found" end
       end
       if not layerSite then error("The tile layers were " .. layerProblem .. ".", 0) end
       return layerSite

@@ -20,3 +20,5 @@ centred_tooltip: Torhäuser messen die Nähe eines Gegners ab der Tormitte.
 tags.bugfixes: Fehlerkorrekturen
 tags.balance: Balance
 gatehouse_access: Treppen für den Zugang zu Torhäusern verlangen
+cat_castle_access: Burgzugang und Verteidigungsanlagen
+cat_gates_capture: Tore und Einnahme

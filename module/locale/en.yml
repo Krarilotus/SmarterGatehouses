@@ -20,3 +20,5 @@ centred_tooltip: Gatehouses measure how close an enemy is from the middle of the
 tags.bugfixes: Bug fixes
 tags.balance: Balance
 gatehouse_access: Require stairs for gatehouse access
+cat_castle_access: Castle access and defences
+cat_gates_capture: Gates and capture

@@ -11,6 +11,7 @@ options:
   text: '{{enemy_gates_closed_tooltip}}'
   category:
   - '{{bugfixes}}'
+  - '{{cat_gates_capture}}'
 - url: smarter-gatehouses.pathing.remember_blocked
   name: smarter-gatehouses-pathing-remember-blocked
   display: UCP2Switch
@@ -21,6 +22,7 @@ options:
   text: '{{remember_blocked_tooltip}}'
   category:
   - '{{bugfixes}}'
+  - '{{cat_gates_capture}}'
 - url: smarter-gatehouses.detection.centred
   name: smarter-gatehouses-detection-centred
   display: UCP2Switch
@@ -31,6 +33,7 @@ options:
   text: '{{centred_tooltip}}'
   category:
   - '{{bugfixes}}'
+  - '{{cat_gates_capture}}'
 - url: smarter-gatehouses.detection.reachable_only
   name: smarter-gatehouses-detection-reachable-only
   display: UCP2Switch
@@ -41,6 +44,7 @@ options:
   text: '{{reachable_only_tooltip}}'
   category:
   - '{{bugfixes}}'
+  - '{{cat_gates_capture}}'
 - display: GroupBox
   hasHeader: true
   header: '{{gatehouse_access}}'
@@ -71,6 +75,7 @@ options:
     text: '{{assassins_climb_tooltip}}'
   category:
   - '{{balance_changes}}'
+  - '{{cat_castle_access}}'
 - display: GroupBox
   hasHeader: true
   header: '{{large_gatehouse_damage}}'
@@ -88,6 +93,7 @@ options:
     tooltip: '{{large_gatehouse_damage_tooltip}}'
   category:
   - '{{balance_changes}}'
+  - '{{cat_castle_access}}'
 - url: smarter-gatehouses.pathing.remember_ticks
   name: smarter-gatehouses-pathing-remember-ticks
   display: Number

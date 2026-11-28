@@ -20,3 +20,5 @@ centred_tooltip: 城门楼从城门正中央计算敌人的接近距离。
 tags.bugfixes: 错误修复
 tags.balance: 平衡
 gatehouse_access: 登上城门楼必须经过阶梯
+cat_castle_access: 城堡通行与防御工事
+cat_gates_capture: 城门与占领

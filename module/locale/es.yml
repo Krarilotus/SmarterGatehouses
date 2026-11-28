@@ -20,3 +20,5 @@ centred_tooltip: Las casas de la puerta miden la cercanía del enemigo desde el 
 tags.bugfixes: Correcciones
 tags.balance: Equilibrio
 gatehouse_access: Exigir escaleras para subir a las casas de la puerta
+cat_castle_access: Acceso y defensas del castillo
+cat_gates_capture: Puertas y captura

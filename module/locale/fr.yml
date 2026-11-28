@@ -20,3 +20,5 @@ centred_tooltip: Les corps de garde mesurent la proximité d’un ennemi depuis 
 tags.bugfixes: Corrections
 tags.balance: Équilibrage
 gatehouse_access: Exiger des escaliers pour accéder aux portes
+cat_castle_access: Accès et défenses du château
+cat_gates_capture: Portes et capture

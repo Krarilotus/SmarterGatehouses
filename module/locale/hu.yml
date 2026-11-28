@@ -20,3 +20,5 @@ centred_tooltip: A kapuházak a kapu közepétől mérik az ellenség közelség
 tags.bugfixes: Hibajavítások
 tags.balance: Egyensúly
 gatehouse_access: Lépcső megkövetelése a kapuházra jutáshoz
+cat_castle_access: Várbejárás és védművek
+cat_gates_capture: Kapuk és elfoglalás

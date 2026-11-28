@@ -20,3 +20,5 @@ centred_tooltip: Kapı binaları bir düşmanın yakınlığını kapının orta
 tags.bugfixes: Hata düzeltmeleri
 tags.balance: Denge
 gatehouse_access: Kapı binasına çıkmak için merdiven gerektir
+cat_castle_access: Kale erişimi ve savunmaları
+cat_gates_capture: Kapılar ve ele geçirme
